@@ -5,7 +5,7 @@ public class Testing {
         Cube cube = new Cube();
         System.out.println(cube);
 
-        cube.FPrime();
+        cube.RPrime();
         System.out.println(cube);
 
     }
