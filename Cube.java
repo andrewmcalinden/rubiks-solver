@@ -523,7 +523,6 @@ public class Cube {
         ((Edge) middleCopy.get(5)).setSc(origFc);
         ((Edge) middleCopy.get(5)).setFc(origSc);
 
-
         bottom.set(6, middleCopy.get(5));
 
         // middle index 3 goes to top index 2
@@ -592,7 +591,6 @@ public class Cube {
 
         ((Edge) middleCopy.get(3)).setSc(origFc);
         ((Edge) middleCopy.get(3)).setFc(origSc);
-
 
         bottom.set(4, middleCopy.get(3));
 
@@ -663,7 +661,6 @@ public class Cube {
         ((Edge) bottomCopy.get(4)).setSc(origFc);
         ((Edge) bottomCopy.get(4)).setFc(origSc);
 
-
         middle.set(3, bottomCopy.get(4));
 
         // top index 4 goes to middle index 1
@@ -687,59 +684,233 @@ public class Cube {
 
         top.set(1, bottomCopy.get(7));
 
-        // middle index 1 goes to bottom index 4
-        bottom.set(4, middleCopy.get(1));
+        // middle index 7 goes to bottom index 8, fc/sc switched
+        origSc = ((Edge) middleCopy.get(7)).getSc();
+        origFc = ((Edge) middleCopy.get(7)).getFc();
 
-        // bottom index 3 goes to bottom index 5, fc and vc are switched
-        origSc = ((Corner) bottomCopy.get(3)).getVc();
-        origFc = ((Corner) bottomCopy.get(3)).getFc();
+        ((Edge) middleCopy.get(7)).setSc(origFc);
+        ((Edge) middleCopy.get(7)).setFc(origSc);
 
-        ((Corner) bottomCopy.get(3)).setVc(origFc);
-        ((Corner) bottomCopy.get(3)).setFc(origSc);
+        bottom.set(8, middleCopy.get(7));
 
-        bottom.set(5, bottomCopy.get(3));
+        // bottom index 1 goes to bottom index 7, fc and vc are switched
+        origSc = ((Corner) bottomCopy.get(1)).getVc();
+        origFc = ((Corner) bottomCopy.get(1)).getFc();
 
-        // top index 5 goes to bottom index 3, fc and vc are switched
-        origSc = ((Corner) topCopy.get(5)).getVc();
-        origFc = ((Corner) topCopy.get(5)).getFc();
+        ((Corner) bottomCopy.get(1)).setVc(origFc);
+        ((Corner) bottomCopy.get(1)).setFc(origSc);
 
-        ((Corner) topCopy.get(5)).setVc(origFc);
-        ((Corner) topCopy.get(5)).setFc(origSc);
+        bottom.set(7, bottomCopy.get(1));
 
-        bottom.set(3, topCopy.get(5));
+        // top index 7 goes to bottom index 1, fc and vc are switched
+        origSc = ((Corner) topCopy.get(7)).getVc();
+        origFc = ((Corner) topCopy.get(7)).getFc();
 
-        // middle index 3 goes to top index 4, fc/sc switched
-        origSc = ((Edge) middleCopy.get(3)).getSc();
-        origFc = ((Edge) middleCopy.get(3)).getFc();
+        ((Corner) topCopy.get(7)).setVc(origFc);
+        ((Corner) topCopy.get(7)).setFc(origSc);
 
-        ((Edge) middleCopy.get(3)).setSc(origFc);
-        ((Edge) middleCopy.get(3)).setFc(origSc);
+        bottom.set(1, topCopy.get(7));
 
-        top.set(4, middleCopy.get(3));
+        // middle index 5 goes to top index 8
+        top.set(8, middleCopy.get(5));
 
-        // top index 3 goes to top index 5, fc and vc are switched
-        origSc = ((Corner) topCopy.get(3)).getVc();
-        origFc = ((Corner) topCopy.get(3)).getFc();
+        // top index 1 goes to top index 7, fc and vc are switched
+        origSc = ((Corner) topCopy.get(1)).getVc();
+        origFc = ((Corner) topCopy.get(1)).getFc();
 
-        ((Corner) topCopy.get(3)).setVc(origFc);
-        ((Corner) topCopy.get(3)).setFc(origSc);
+        ((Corner) topCopy.get(1)).setVc(origFc);
+        ((Corner) topCopy.get(1)).setFc(origSc);
 
-        top.set(5, topCopy.get(3));
+        top.set(7, topCopy.get(1));
 
-        // bottom index 4 goes to middle index 3, fc/sc switched
-        origSc = ((Edge) bottomCopy.get(4)).getSc();
-        origFc = ((Edge) bottomCopy.get(4)).getFc();
+        // bottom index 8 goes to middle index 5
+        middle.set(5, bottomCopy.get(8));
 
-        ((Edge) bottomCopy.get(4)).setSc(origFc);
-        ((Edge) bottomCopy.get(4)).setFc(origSc);
+        // top index 8 goes to middle index 7, fc/sc switched
+        origSc = ((Edge) topCopy.get(8)).getSc();
+        origFc = ((Edge) topCopy.get(8)).getFc();
 
+        ((Edge) topCopy.get(8)).setSc(origFc);
+        ((Edge) topCopy.get(8)).setFc(origSc);
 
-        middle.set(3, bottomCopy.get(4));
-
-        // top index 4 goes to middle index 1
-        middle.set(1, topCopy.get(4));
+        middle.set(7, topCopy.get(8));
 
         update();
+
+    }
+
+    public void LPrime() {
+        List<Object> bottomCopy = new ArrayList<>(bottom);
+        List<Object> topCopy = new ArrayList<>(top);
+        List<Object> middleCopy = new ArrayList<>(middle);
+
+        // bottom index 1 goes to top index 7, fc/vc switched
+        String origSc = ((Corner) bottomCopy.get(1)).getVc();
+        String origFc = ((Corner) bottomCopy.get(1)).getFc();
+
+        ((Corner) bottomCopy.get(1)).setVc(origFc);
+        ((Corner) bottomCopy.get(1)).setFc(origSc);
+
+        top.set(7, bottomCopy.get(1));
+
+        // bottom index 8 goes to middle index 7, fc/sc switched
+        origSc = ((Edge) bottomCopy.get(8)).getSc();
+        origFc = ((Edge) bottomCopy.get(8)).getFc();
+
+        ((Edge) bottomCopy.get(8)).setSc(origFc);
+        ((Edge) bottomCopy.get(8)).setFc(origSc);
+
+        middle.set(7, bottomCopy.get(8));
+
+        // bottom index 7 goes to bottom index 1, fc and vc are switched
+        origSc = ((Corner) bottomCopy.get(7)).getVc();
+        origFc = ((Corner) bottomCopy.get(7)).getFc();
+
+        ((Corner) bottomCopy.get(7)).setVc(origFc);
+        ((Corner) bottomCopy.get(7)).setFc(origSc);
+
+        bottom.set(1, bottomCopy.get(7));
+
+        // top index 1 goes to bottom index 7, fc and vc are switched
+        origSc = ((Corner) topCopy.get(1)).getVc();
+        origFc = ((Corner) topCopy.get(1)).getFc();
+
+        ((Corner) topCopy.get(1)).setVc(origFc);
+        ((Corner) topCopy.get(1)).setFc(origSc);
+
+        bottom.set(7, topCopy.get(1));
+
+        // top index 8 goes to middle index 5
+        middle.set(5, topCopy.get(8));
+
+        // top index 7 goes to top index 1, fc and vc are switched
+        origSc = ((Corner) topCopy.get(7)).getVc();
+        origFc = ((Corner) topCopy.get(7)).getFc();
+
+        ((Corner) topCopy.get(7)).setVc(origFc);
+        ((Corner) topCopy.get(7)).setFc(origSc);
+
+        top.set(1, topCopy.get(7));
+
+        // middle index 5 goes to bottom index 8
+        bottom.set(8, middleCopy.get(5));
+
+        // middle index 7 goes to top index 8, fc/sc switched
+        origSc = ((Edge) middleCopy.get(7)).getSc();
+        origFc = ((Edge) middleCopy.get(7)).getFc();
+
+        ((Edge) middleCopy.get(7)).setSc(origFc);
+        ((Edge) middleCopy.get(7)).setFc(origSc);
+
+        top.set(8, middleCopy.get(7));
+
+        update();
+
+    }
+
+    public void cross() {
+        List<Object> topCopy = new ArrayList<>(top);
+        // try doing flower method
+        for (int i = 0; i < topCopy.size(); i += 2) {
+            Edge current = (Edge) topCopy.get(i);
+
+            if (current.getFc().equals("w")) {
+                int below;
+
+                if (i != 8) {
+                    below = Math.abs(i - 6);
+                }
+
+                else {
+                    below = 6;
+                }
+
+                if (current.getSc().equals("b")) {
+                    for (int j = 0; j < below / 2; j++) {
+                        U();
+                    }
+                    F();
+                    F();
+                }
+
+                if (current.getSc().equals("o")) {
+                    for (int j = 0; j < below / 2 + 1; j++) {
+                        U();
+                    }
+                    L();
+                    L();
+                }
+
+                if (current.getSc().equals("g")) {
+                    for (int j = 0; j < below / 2 + 2; j++) {
+                        U();
+                    }
+                    B();
+                    B();
+                }
+
+                if (current.getSc().equals("r")) {
+                    for (int j = 0; j < below / 2 + 3; j++) {
+                        U();
+                    }
+                    R();
+                    R();
+                }
+
+            }
+        }
+
+        topCopy = new ArrayList<>(top);
+        // white edge in top layer but white is not facing up
+        for (int i = 0; i < topCopy.size(); i += 2) {
+            Edge current = (Edge) topCopy.get(i);
+
+            if (current.getSc().equals("w")) {
+                int below;
+
+                if (i != 8) {
+                    below = Math.abs(i - 6);
+                }
+
+                else {
+                    below = 6;
+                }
+
+                if (current.getFc().equals("b")) {
+                    for (int j = 0; j < below / 2 - 1; j++) {
+                        U();
+                    }
+
+                    F();
+                    F();
+                }
+
+                if (current.getFc().equals("o")) {
+                    for (int j = 0; j < below / 2; j++) {
+                        U();
+                    }
+                    L();
+                    L();
+                }
+
+                if (current.getFc().equals("g")) {
+                    for (int j = 0; j < below / 2 + 1; j++) {
+                        U();
+                    }
+                    B();
+                    B();
+                }
+
+                if (current.getFc().equals("r")) {
+                    for (int j = 0; j < below / 2 + 2; j++) {
+                        U();
+                    }
+                    R();
+                    R();
+                }
+
+            }
+        }
 
     }
 
@@ -750,8 +921,6 @@ public class Cube {
         cube.add(middle);
         cube.add(top);
     }
-
-    
 
     public String toString() {
         return "" + cube;
