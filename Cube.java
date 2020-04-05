@@ -57,7 +57,7 @@ public class Cube {
 
         edgeBot1 = new Edge("g", "r");
         edgeBot2 = new Edge("g", "y");
-        edgeBot3 = new Edge("b", "w");
+        edgeBot3 = new Edge("w", "b"); // should be: edgeBot3 = new Edge("b", "w");
         edgeBot4 = new Edge("r", "y");
 
         bottom = new ArrayList<Object>();
@@ -841,49 +841,86 @@ public class Cube {
 
         List<Integer> avoid = new ArrayList<Integer>();
 
+        List<Integer> safe = new ArrayList<Integer>();
+        safe.add(2);
+        safe.add(4);
+        safe.add(6);
+        safe.add(8);
+
         // put all white pieces around yellow, then rotate to correct center and twist
         // 180 degrees
 
-        // first, check for white in top layer
+        // first, check for white in top layer rotated correctly
         for (int i = 2; i < topCopy.size(); i += 2) {
+
             Edge current = (Edge) topCopy.get(i);
 
             if (current.getFc().equals("w")) { // already correctly rotated (white is up)
                 avoid.add(i); // know to avoid messing up this location
-                //System.out.println("i " + i);
+
             }
 
-            System.out.println("avoid " + avoid + "i " + i);
+        }
+
+        // next, look for white not rotated correcty in top layer
+        for (int i = 2; i < topCopy.size(); i += 2) {
+
+            Edge current = (Edge) topCopy.get(i);
 
             if (current.getSc().equals("w")) {
                 // first move it in front of the blue center
                 if (i == 2) {
-                    //System.out.println("dog");
+
                     U();
                     U();
                     // change location to avoid based on moves we did
                     for (int j = 0; j < avoid.size(); j++) {
-                        //System.out.println("dog");
-                        avoid.set(j, (avoid.get(j) + 4) % 8);
+
+                        int set = avoid.get(j) + 2;
+                        if (set == 10) {
+                            set %= 8;
+                        }
+
+                        avoid.set(j, set);
                     }
                 }
 
-                if (i == 4) {
+                else if (i == 4) { // as we do uprime, it evens out with the U: dont need to adjust
                     U();
-                    for (int j = 0; j < avoid.size(); j++) {
-                        avoid.set(j, (avoid.get(j) + 2) % 8);
-                    }
                 }
 
-                if (i == 8) {
+                // if i ==6, we are already rotated in front of blue face
+
+                else if (i == 8) {
                     UPrime();
                     for (int j = 0; j < avoid.size(); j++) {
-                        if (avoid.get(j) == 2) {
-                            avoid.set(j, 8);
-                        } else {
-                            avoid.set(j, (avoid.get(j) - 2));
-                        }
+                        // 2 - 6
+                        // 4 - 8
+                        // 6 - 2
+                        // 8 - 4
+                        int set = (avoid.get(i) + 4) % 8;
+
+                        avoid.set(j, set);
+
                     }
+                }
+
+                else {// i was 6: did only a UPrime
+                      // 2 - 8
+                      // 4 - 2
+                      // 6 - 4
+                      // 8 - 6
+                    for (int j = 0; j < avoid.size(); j++) {
+
+                        int set = avoid.get(i) - 2;
+
+                        if (set == 0) {
+                            set = 8;
+                        }
+
+                        avoid.set(j, set);
+                    }
+
                 }
                 // then, make it so white faces up
                 F();
@@ -895,7 +932,65 @@ public class Cube {
             }
         }
 
-        System.out.println("avoid " + avoid);
+        for (int i = safe.size() - 1; i >= 0; i--) {
+            if (avoid.indexOf(safe.get(i)) > -1) {
+                safe.remove(i);
+            }
+        }
+
+        // then, look for white in the bottom layer rotated correctly for a 180 degree
+        // turn
+
+        List<Object> bottomCopy = new ArrayList<>(bottom);
+
+        for (int i = 2; i < bottomCopy.size(); i += 2) {
+
+            Edge current = (Edge) bottomCopy.get(i);
+
+            if (current.getFc().equals("w")) {
+                int target = safe.get(0);
+
+                if (target == 8 || target == 4) {
+                    while (bottom.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                                // spot, keep twisting
+                        D();
+                    }
+                } else {
+                    while (bottom.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                                // spot, keep twisting
+                        D();
+                    }
+                    D(); // because indexes 6 and 2 are actually opposite, do D twice to account for the
+                         // offset
+                    D();
+                }
+
+                // then, depending on where we aligned the edge, rotate it to the top layer
+                if (target == 2) {
+                    B();
+                    B();
+                }
+
+                if (target == 4) {
+                    R();
+                    R();
+                }
+
+                if (target == 6) {
+                    F();
+                    F();
+                }
+
+                if (target == 8) {
+                    L();
+                    L();
+                }
+
+                safe.remove(0); // know know that the spot we put the edge in isnt safe
+
+            }
+
+        }
 
     }
 
