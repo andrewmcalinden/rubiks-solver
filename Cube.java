@@ -43,6 +43,8 @@ public class Cube {
 
     private List<Object> top;
 
+    private List<String> moves;
+
     private List<List<Object>> cube;
 
     public Cube() {
@@ -120,6 +122,8 @@ public class Cube {
         cube.add(bottom);
         cube.add(middle);
         cube.add(top);
+
+        moves = new ArrayList<String>();
     }
 
     public void D() {
@@ -152,6 +156,8 @@ public class Cube {
 
         bottom = temp;
         update();
+
+        moves.add("D ");
 
     }
 
@@ -186,6 +192,8 @@ public class Cube {
         bottom = temp;
         update();
 
+        moves.add("D' ");
+
     }
 
     public void U() {
@@ -219,6 +227,8 @@ public class Cube {
         top = temp;
         update();
 
+        moves.add("U ");
+
     }
 
     public void UPrime() {
@@ -251,6 +261,8 @@ public class Cube {
 
         top = temp;
         update();
+
+        moves.add("U' ");
 
     }
 
@@ -323,6 +335,8 @@ public class Cube {
 
         update();
 
+        moves.add("F ");
+
     }
 
     public void FPrime() {
@@ -391,6 +405,8 @@ public class Cube {
         bottom.set(2, middleCopy.get(7));
 
         update();
+
+        moves.add("F' ");
 
     }
 
@@ -461,6 +477,8 @@ public class Cube {
 
         update();
 
+        moves.add("B' ");
+
     }
 
     public void B() {
@@ -529,6 +547,8 @@ public class Cube {
         top.set(2, middleCopy.get(3));
 
         update();
+
+        moves.add("B ");
 
     }
 
@@ -599,6 +619,8 @@ public class Cube {
 
         update();
 
+        moves.add("R ");
+
     }
 
     public void RPrime() {
@@ -667,6 +689,8 @@ public class Cube {
         middle.set(1, topCopy.get(4));
 
         update();
+
+        moves.add("R' ");
 
     }
 
@@ -737,6 +761,8 @@ public class Cube {
 
         update();
 
+        moves.add("L ");
+
     }
 
     public void LPrime() {
@@ -806,111 +832,70 @@ public class Cube {
 
         update();
 
+        moves.add("L' ");
+
     }
 
     public void cross() {
         List<Object> topCopy = new ArrayList<>(top);
-        // try doing flower method
-        for (int i = 0; i < topCopy.size(); i += 2) {
+
+        List<Integer> avoid = new ArrayList<Integer>();
+
+        // put all white pieces around yellow, then rotate to correct center and twist
+        // 180 degrees
+
+        // first, check for white in top layer
+        for (int i = 2; i < topCopy.size(); i += 2) {
             Edge current = (Edge) topCopy.get(i);
 
-            if (current.getFc().equals("w")) {
-                int below;
-
-                if (i != 8) {
-                    below = Math.abs(i - 6);
-                }
-
-                else {
-                    below = 6;
-                }
-
-                if (current.getSc().equals("b")) {
-                    for (int j = 0; j < below / 2; j++) {
-                        U();
-                    }
-                    F();
-                    F();
-                }
-
-                if (current.getSc().equals("o")) {
-                    for (int j = 0; j < below / 2 + 1; j++) {
-                        U();
-                    }
-                    L();
-                    L();
-                }
-
-                if (current.getSc().equals("g")) {
-                    for (int j = 0; j < below / 2 + 2; j++) {
-                        U();
-                    }
-                    B();
-                    B();
-                }
-
-                if (current.getSc().equals("r")) {
-                    for (int j = 0; j < below / 2 + 3; j++) {
-                        U();
-                    }
-                    R();
-                    R();
-                }
-
+            if (current.getFc().equals("w")) { // already correctly rotated (white is up)
+                avoid.add(i); // know to avoid messing up this location
+                //System.out.println("i " + i);
             }
-        }
 
-        topCopy = new ArrayList<>(top);
-        // white edge in top layer but white is not facing up
-        for (int i = 0; i < topCopy.size(); i += 2) {
-            Edge current = (Edge) topCopy.get(i);
+            System.out.println("avoid " + avoid + "i " + i);
 
             if (current.getSc().equals("w")) {
-                int below;
-
-                if (i != 8) {
-                    below = Math.abs(i - 6);
-                }
-
-                else {
-                    below = 6;
-                }
-
-                if (current.getFc().equals("b")) {
-                    for (int j = 0; j < below / 2 - 1; j++) {
-                        U();
+                // first move it in front of the blue center
+                if (i == 2) {
+                    //System.out.println("dog");
+                    U();
+                    U();
+                    // change location to avoid based on moves we did
+                    for (int j = 0; j < avoid.size(); j++) {
+                        //System.out.println("dog");
+                        avoid.set(j, (avoid.get(j) + 4) % 8);
                     }
-
-                    F();
-                    F();
                 }
 
-                if (current.getFc().equals("o")) {
-                    for (int j = 0; j < below / 2; j++) {
-                        U();
+                if (i == 4) {
+                    U();
+                    for (int j = 0; j < avoid.size(); j++) {
+                        avoid.set(j, (avoid.get(j) + 2) % 8);
                     }
-                    L();
-                    L();
                 }
 
-                if (current.getFc().equals("g")) {
-                    for (int j = 0; j < below / 2 + 1; j++) {
-                        U();
+                if (i == 8) {
+                    UPrime();
+                    for (int j = 0; j < avoid.size(); j++) {
+                        if (avoid.get(j) == 2) {
+                            avoid.set(j, 8);
+                        } else {
+                            avoid.set(j, (avoid.get(j) - 2));
+                        }
                     }
-                    B();
-                    B();
                 }
+                // then, make it so white faces up
+                F();
+                UPrime();
+                R();
 
-                if (current.getFc().equals("r")) {
-                    for (int j = 0; j < below / 2 + 2; j++) {
-                        U();
-                    }
-                    R();
-                    R();
-                }
+                avoid.add(4); // this will put it at index 4: avoid that index
 
             }
         }
+
+        System.out.println("avoid " + avoid);
 
     }
 
@@ -923,6 +908,6 @@ public class Cube {
     }
 
     public String toString() {
-        return "" + cube;
+        return "" + cube + moves;
     }
 }
