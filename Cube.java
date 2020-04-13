@@ -57,7 +57,7 @@ public class Cube {
 
         edgeBot1 = new Edge("g", "r");
         edgeBot2 = new Edge("g", "y");
-        edgeBot3 = new Edge("w", "b"); // should be: edgeBot3 = new Edge("b", "w");
+        edgeBot3 = new Edge("b", "w");
         edgeBot4 = new Edge("r", "y");
 
         bottom = new ArrayList<Object>();
@@ -992,38 +992,83 @@ public class Cube {
 
         }
 
+
+
         // now, check for edges in the bottom rotated incorrectly
-        /*
-         * bottomCopy = new ArrayList<>(bottom);
-         * 
-         * for (int i = 2; i < bottomCopy.size(); i += 2) {
-         * 
-         * Edge current = (Edge) bottomCopy.get(i);
-         * 
-         * if (current.getSc().equals("w")) { int target = safe.get(0);
-         * 
-         * if (target == 8 || target == 4) { while (bottom.indexOf(current) != target) {
-         * // while location of edge is not at a known safe // spot, keep twisting D();
-         * } } else { while (bottom.indexOf(current) != target) { // while location of
-         * edge is not at a known safe // spot, keep twisting D(); } D(); // because
-         * indexes 6 and 2 are actually opposite, do D twice to account for the //
-         * offset D(); }
-         * 
-         * // then, depending on where we aligned the edge, rotate it to the top layer
-         * if (target == 2) { B(); B(); }
-         * 
-         * if (target == 4) { R(); R(); }
-         * 
-         * if (target == 6) { F(); F(); }
-         * 
-         * if (target == 8) { L(); L(); }
-         * 
-         * safe.remove(0); // know know that the spot we put the edge in isnt safe
-         * 
-         * }
-         * 
-         * }
-         */
+
+        bottomCopy = new ArrayList<>(bottom);
+
+        for (int i = 2; i < bottomCopy.size(); i += 2) {
+
+            Edge current = (Edge) bottomCopy.get(i);
+
+            if (current.getSc().equals("w")) {
+                int target = safe.get(0);
+
+                if (target == 8 || target == 4) {
+                    while (bottom.indexOf(current) != target) {
+                        // while location of edge is not at a known safe // spot, keep twisting D();
+                        D();
+                    }
+                } else {
+                    // while location of edge is not at a known safe spot, keep twisting
+                    while (bottom.indexOf(current) != target) {
+
+                        D();
+                    }
+
+                    // because indexes 6 and 2 are actually opposite, do D twice to account for the offset
+                    D();
+                    D();
+
+                    
+                }
+
+                // then, depending on where we aligned the edge, rotate it to the top layer
+                if (target == 2) {
+                    B();
+                    U();
+                    RPrime();
+                    UPrime();
+                }
+
+                if (target == 4) {
+                    R();
+                    U();
+                    F();
+                    UPrime();
+                }
+
+                if (target == 6) {
+                    F();
+                    U();
+                    LPrime();
+                    UPrime();
+                }
+
+                if (target == 8) {
+                    LPrime();
+                    UPrime();
+                    F();
+                    U();
+                }
+
+                safe.remove(0); // know know that the spot we put the edge in isnt safe
+
+            }
+
+        }
+
+        
+
+        //look for edges in middle layer to flip up
+        List <Object> middleCopy = new ArrayList<>(middle);
+        
+
+
+
+        System.out.println("Safe" + safe);
+
     }
 
     public void update() {
