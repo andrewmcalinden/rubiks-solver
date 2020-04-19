@@ -102,7 +102,7 @@ public class Cube {
 
         edgeTop1 = new Edge("r", "b");
         edgeTop2 = new Edge("o", "b");
-        edgeTop3 = new Edge("o", "w"); //should be w, o
+        edgeTop3 = new Edge("w", "o");
         edgeTop4 = new Edge("w", "g");
 
         top = new ArrayList<Object>();
@@ -836,8 +836,7 @@ public class Cube {
 
     }
 
-    public void cross() {
-        List<Object> topCopy = new ArrayList<>(top);
+    public void startCross() {
 
         List<Integer> avoid = new ArrayList<Integer>();
 
@@ -851,11 +850,11 @@ public class Cube {
         // 180 degrees
 
         // first, check for white in top layer rotated correctly
-        for (int i = 2; i < topCopy.size(); i += 2) {
+        for (int i = 2; i < top.size(); i += 2) {
 
-            topCopy = new ArrayList<>(top);
+            
 
-            Edge current = (Edge) topCopy.get(i);
+            Edge current = (Edge) top.get(i);
 
             if (current.getFc().equals("w")) { // already correctly rotated (white is up)
                 avoid.add(i); // know to avoid messing up this location
@@ -865,9 +864,9 @@ public class Cube {
         }
 
         // next, look for white not rotated correcty in top layer
-        for (int i = 2; i < topCopy.size(); i += 2) {
+        for (int i = 2; i < top.size(); i += 2) {
 
-            Edge current = (Edge) topCopy.get(i);
+            Edge current = (Edge) top.get(i);
 
             if (current.getSc().equals("w")) {
                 // first move it in front of the blue center
@@ -900,7 +899,7 @@ public class Cube {
                         // 4 - 8
                         // 6 - 2
                         // 8 - 4
-                        int set = (avoid.get(i) + 4) % 8;
+                        int set = (avoid.get(j) + 4) % 8;
 
                         avoid.set(j, set);
 
@@ -938,6 +937,8 @@ public class Cube {
 
         moves.add("end top wrong ");
 
+        //change safe spaces based on avoid
+
         for (int i = safe.size() - 1; i >= 0; i--) {
             if (avoid.indexOf(safe.get(i)) > -1) {
                 safe.remove(i);
@@ -947,13 +948,13 @@ public class Cube {
         // then, look for white in the bottom layer rotated correctly for a 180 degree
         // turn
 
-        List<Object> bottomCopy = new ArrayList<>(bottom);
+       
 
-        for (int i = 2; i < bottomCopy.size(); i += 2) {
+        for (int i = 2; i < bottom.size(); i += 2) {
 
-            bottomCopy = new ArrayList<>(bottom);
+            
 
-            Edge current = (Edge) bottomCopy.get(i);
+            Edge current = (Edge) bottom.get(i);
 
             if (current.getFc().equals("w")) {
                 int target = safe.get(0);
@@ -1008,13 +1009,13 @@ public class Cube {
 
         // now, check for edges in the bottom rotated incorrectly
 
-        bottomCopy = new ArrayList<>(bottom);
+        
 
-        for (int i = 2; i < bottomCopy.size(); i += 2) {
+        for (int i = 2; i < bottom.size(); i += 2) {
 
-            bottomCopy = new ArrayList<>(bottom);
+            
 
-            Edge current = (Edge) bottomCopy.get(i);
+            Edge current = (Edge) bottom.get(i);
 
             if (current.getSc().equals("w")) {
                 int target = safe.get(0);
@@ -1080,12 +1081,12 @@ public class Cube {
         
 
         //look for edges in middle layer to flip up
-        List <Object> middleCopy = new ArrayList<>(middle);
+        
         //loop through middle layer looking for edges with white
-        for (int i = 1; i < middleCopy.size(); i+=2){
+        for (int i = 1; i < middle.size(); i+=2){
 
-            middleCopy = new ArrayList<>(middle); //makes sure we have up to date info for each loop
-            Edge current = (Edge) middleCopy.get(i);
+            
+            Edge current = (Edge) middle.get(i);
 
             if (current.getFc().equals("w") || current.getSc().equals("w")){
                 //System.out.println("white in middle, " + i);

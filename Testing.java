@@ -5,8 +5,8 @@ public class Testing {
         Cube cube = new Cube();
         System.out.println(cube);
 
-        while (!cube.crossMade()){ //at the u2 f2
-            cube.cross();
+        while (!cube.crossMade()){
+            cube.startCross();
         }
 
         
