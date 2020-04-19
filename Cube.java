@@ -50,15 +50,15 @@ public class Cube {
     public Cube() {
         botCenter = new Center("w");
 
-        cornerBot1 = new Corner("o", "g", "w");
-        cornerBot2 = new Corner("g", "r", "y");
-        cornerBot3 = new Corner("b", "r", "y");
-        cornerBot4 = new Corner("g", "y", "o");
+        cornerBot1 = new Corner("r", "w", "g");
+        cornerBot2 = new Corner("y", "g", "r");
+        cornerBot3 = new Corner("w", "o", "g");
+        cornerBot4 = new Corner("b", "w", "o");
 
-        edgeBot1 = new Edge("g", "r");
-        edgeBot2 = new Edge("g", "y");
-        edgeBot3 = new Edge("b", "w");
-        edgeBot4 = new Edge("r", "y");
+        edgeBot1 = new Edge("b", "w");
+        edgeBot2 = new Edge("y", "g");
+        edgeBot3 = new Edge("y", "r"); 
+        edgeBot4 = new Edge("g", "o");
 
         bottom = new ArrayList<Object>();
 
@@ -77,10 +77,10 @@ public class Cube {
         midCenter3 = new Center("g");
         midCenter4 = new Center("o");
 
-        edgeMid1 = new Edge("o", "g");
-        edgeMid2 = new Edge("r", "b");
-        edgeMid3 = new Edge("r", "w");
-        edgeMid4 = new Edge("o", "y");
+        edgeMid1 = new Edge("g", "r");
+        edgeMid2 = new Edge("y", "o");
+        edgeMid3 = new Edge("w", "r");
+        edgeMid4 = new Edge("b", "y");
 
         middle = new ArrayList<Object>();
 
@@ -95,15 +95,15 @@ public class Cube {
 
         topCenter = new Center("y");
 
-        cornerTop1 = new Corner("w", "g", "r");
-        cornerTop2 = new Corner("b", "w", "o");
+        cornerTop1 = new Corner("r", "y", "b");
+        cornerTop2 = new Corner("y", "b", "o");
         cornerTop3 = new Corner("w", "r", "b");
-        cornerTop4 = new Corner("y", "b", "o");
+        cornerTop4 = new Corner("g", "y", "o");
 
-        edgeTop1 = new Edge("g", "w");
-        edgeTop2 = new Edge("w", "o");
-        edgeTop3 = new Edge("y", "b");
-        edgeTop4 = new Edge("b", "o");
+        edgeTop1 = new Edge("r", "b");
+        edgeTop2 = new Edge("o", "b");
+        edgeTop3 = new Edge("o", "w"); //should be w, o
+        edgeTop4 = new Edge("w", "g");
 
         top = new ArrayList<Object>();
 
@@ -853,6 +853,8 @@ public class Cube {
         // first, check for white in top layer rotated correctly
         for (int i = 2; i < topCopy.size(); i += 2) {
 
+            topCopy = new ArrayList<>(top);
+
             Edge current = (Edge) topCopy.get(i);
 
             if (current.getFc().equals("w")) { // already correctly rotated (white is up)
@@ -912,7 +914,7 @@ public class Cube {
                       // 8 - 6
                     for (int j = 0; j < avoid.size(); j++) {
 
-                        int set = avoid.get(i) - 2;
+                        int set = avoid.get(j) - 2;
 
                         if (set == 0) {
                             set = 8;
@@ -930,7 +932,11 @@ public class Cube {
                 avoid.add(4); // this will put it at index 4: avoid that index
 
             }
+
+            
         }
+
+        moves.add("end top wrong ");
 
         for (int i = safe.size() - 1; i >= 0; i--) {
             if (avoid.indexOf(safe.get(i)) > -1) {
@@ -944,6 +950,8 @@ public class Cube {
         List<Object> bottomCopy = new ArrayList<>(bottom);
 
         for (int i = 2; i < bottomCopy.size(); i += 2) {
+
+            bottomCopy = new ArrayList<>(bottom);
 
             Edge current = (Edge) bottomCopy.get(i);
 
@@ -990,7 +998,11 @@ public class Cube {
 
             }
 
+           
+
         }
+
+        moves.add("end bottom right ");
 
 
 
@@ -999,6 +1011,8 @@ public class Cube {
         bottomCopy = new ArrayList<>(bottom);
 
         for (int i = 2; i < bottomCopy.size(); i += 2) {
+
+            bottomCopy = new ArrayList<>(bottom);
 
             Edge current = (Edge) bottomCopy.get(i);
 
@@ -1035,7 +1049,7 @@ public class Cube {
                 if (target == 4) {
                     R();
                     U();
-                    F();
+                    FPrime();
                     UPrime();
                 }
 
@@ -1057,18 +1071,134 @@ public class Cube {
 
             }
 
+           
+
         }
+
+        moves.add("end bottom wrong ");
 
         
 
         //look for edges in middle layer to flip up
         List <Object> middleCopy = new ArrayList<>(middle);
+        //loop through middle layer looking for edges with white
+        for (int i = 1; i < middleCopy.size(); i+=2){
+
+            middleCopy = new ArrayList<>(middle); //makes sure we have up to date info for each loop
+            Edge current = (Edge) middleCopy.get(i);
+
+            if (current.getFc().equals("w") || current.getSc().equals("w")){
+                //System.out.println("white in middle, " + i);
+                //cases for each location it could be in
+                switch(i){
+
+                    case 1:
+                        //tells us which way to flip it up
+                        if (current.getFc().equals("w")){
+                            //rotate top layer until its safe to insert in edge
+                            while (((Edge) top.get(4)).getFc().equals("w")) {
+                                U();
+                            }
+                            //rotate it in
+                            R();
+
+
+                        }
+                        //sc was white
+                        else{
+                            while (((Edge) top.get(6)).getFc().equals("w")) {
+                                U();
+                            }
+
+                            FPrime();
+                        }
+                        break;
+
+                    case 3:
+                        if (current.getFc().equals("w")) {
+                            // rotate top layer until its safe to insert in edge
+                            while (((Edge) top.get(2)).getFc().equals("w")) {
+                                U();
+                            }
+                            // rotate it in
+                            B();
+
+                        }
+
+                        else {
+                            while (((Edge) top.get(4)).getFc().equals("w")) {
+                                U();
+                            }
+
+                            RPrime();
+                        }
+                        break;
+
+                    case 5:
+                        if (current.getFc().equals("w")) {
+                            // rotate top layer until its safe to insert in edge
+                            while (((Edge) top.get(8)).getFc().equals("w")) {
+                                U();
+                            }
+                            // rotate it in
+                            L();
+
+                        }
+
+                        else {
+                            while (((Edge) top.get(2)).getFc().equals("w")) {
+                                U();
+                            }
+
+                            BPrime();
+                        }
+                        break;
+
+                    case 7:
+                        moves.add("somethig at 7 my lad");
+                        if (current.getFc().equals("w")) {
+                            // rotate top layer until its safe to insert in edge
+                            while (((Edge) top.get(6)).getFc().equals("w")) {
+                                U();
+                            }
+                            // rotate it in
+                            F();
+
+                        }
+
+                        else {
+                            while (((Edge) top.get(8)).getFc().equals("w")) {
+                                U();
+                            }
+
+                            LPrime();
+                        }
+                        break;
+
+                
+                        
+                }
+            }
+
+            
+        }
+
+        moves.add("end middle ");
         
 
 
 
-        System.out.println("Safe" + safe);
+        //System.out.println("Safe" + safe);
 
+    }
+
+    public boolean crossMade(){
+        boolean one = ((Edge) top.get(2)).getFc().equals("w");
+        boolean two = ((Edge) top.get(4)).getFc().equals("w");
+        boolean three = ((Edge) top.get(6)).getFc().equals("w");
+        boolean four = ((Edge) top.get(8)).getFc().equals("w");
+
+        return (one && two && three && four);
     }
 
     public void update() {

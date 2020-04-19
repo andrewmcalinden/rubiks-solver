@@ -5,7 +5,11 @@ public class Testing {
         Cube cube = new Cube();
         System.out.println(cube);
 
-        cube.cross();
+        while (!cube.crossMade()){ //at the u2 f2
+            cube.cross();
+        }
+
+        
         System.out.println(cube);
 
     }
