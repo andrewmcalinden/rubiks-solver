@@ -57,7 +57,7 @@ public class Cube {
 
         edgeBot1 = new Edge("b", "w");
         edgeBot2 = new Edge("y", "g");
-        edgeBot3 = new Edge("y", "r"); 
+        edgeBot3 = new Edge("y", "r");
         edgeBot4 = new Edge("g", "o");
 
         bottom = new ArrayList<Object>();
@@ -852,8 +852,6 @@ public class Cube {
         // first, check for white in top layer rotated correctly
         for (int i = 2; i < top.size(); i += 2) {
 
-            
-
             Edge current = (Edge) top.get(i);
 
             if (current.getFc().equals("w")) { // already correctly rotated (white is up)
@@ -932,12 +930,11 @@ public class Cube {
 
             }
 
-            
         }
 
         moves.add("end top wrong ");
 
-        //change safe spaces based on avoid
+        // change safe spaces based on avoid
 
         for (int i = safe.size() - 1; i >= 0; i--) {
             if (avoid.indexOf(safe.get(i)) > -1) {
@@ -948,11 +945,7 @@ public class Cube {
         // then, look for white in the bottom layer rotated correctly for a 180 degree
         // turn
 
-       
-
         for (int i = 2; i < bottom.size(); i += 2) {
-
-            
 
             Edge current = (Edge) bottom.get(i);
 
@@ -999,21 +992,13 @@ public class Cube {
 
             }
 
-           
-
         }
 
         moves.add("end bottom right ");
 
-
-
         // now, check for edges in the bottom rotated incorrectly
 
-        
-
         for (int i = 2; i < bottom.size(); i += 2) {
-
-            
 
             Edge current = (Edge) bottom.get(i);
 
@@ -1032,11 +1017,11 @@ public class Cube {
                         D();
                     }
 
-                    // because indexes 6 and 2 are actually opposite, do D twice to account for the offset
+                    // because indexes 6 and 2 are actually opposite, do D twice to account for the
+                    // offset
                     D();
                     D();
 
-                    
                 }
 
                 // then, depending on where we aligned the edge, rotate it to the top layer
@@ -1072,41 +1057,35 @@ public class Cube {
 
             }
 
-           
-
         }
 
         moves.add("end bottom wrong ");
 
-        
+        // look for edges in middle layer to flip up
 
-        //look for edges in middle layer to flip up
-        
-        //loop through middle layer looking for edges with white
-        for (int i = 1; i < middle.size(); i+=2){
+        // loop through middle layer looking for edges with white
+        for (int i = 1; i < middle.size(); i += 2) {
 
-            
             Edge current = (Edge) middle.get(i);
 
-            if (current.getFc().equals("w") || current.getSc().equals("w")){
-                //System.out.println("white in middle, " + i);
-                //cases for each location it could be in
-                switch(i){
+            if (current.getFc().equals("w") || current.getSc().equals("w")) {
+                // System.out.println("white in middle, " + i);
+                // cases for each location it could be in
+                switch (i) {
 
                     case 1:
-                        //tells us which way to flip it up
-                        if (current.getFc().equals("w")){
-                            //rotate top layer until its safe to insert in edge
+                        // tells us which way to flip it up
+                        if (current.getFc().equals("w")) {
+                            // rotate top layer until its safe to insert in edge
                             while (((Edge) top.get(4)).getFc().equals("w")) {
                                 U();
                             }
-                            //rotate it in
+                            // rotate it in
                             R();
 
-
                         }
-                        //sc was white
-                        else{
+                        // sc was white
+                        else {
                             while (((Edge) top.get(6)).getFc().equals("w")) {
                                 U();
                             }
@@ -1176,24 +1155,18 @@ public class Cube {
                         }
                         break;
 
-                
-                        
                 }
             }
 
-            
         }
 
         moves.add("end middle ");
-        
 
-
-
-        //System.out.println("Safe" + safe);
+        // System.out.println("Safe" + safe);
 
     }
 
-    public boolean crossMade(){
+    public boolean crossMade() {
         boolean one = ((Edge) top.get(2)).getFc().equals("w");
         boolean two = ((Edge) top.get(4)).getFc().equals("w");
         boolean three = ((Edge) top.get(6)).getFc().equals("w");
