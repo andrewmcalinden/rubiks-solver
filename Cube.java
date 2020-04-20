@@ -1166,6 +1166,163 @@ public class Cube {
 
     }
 
+    public void finishCross() {
+        int offset = 0; // how far away next white piece
+
+        String two = ((Edge) top.get(2)).getSc();
+
+        switch (two) {
+            case "g":
+                B();
+                B();
+                break;
+
+            case "r":
+                U();
+                offset += 2;
+                R();
+                R();
+                break;
+
+            case "b":
+                U();
+                U();
+                offset += 4;
+                F();
+                F();
+                break;
+
+            case "o":
+                UPrime();
+                offset += 6;
+                L();
+                L();
+                break;
+        }
+
+        int loc = 4 + offset;
+
+        if (loc > 8) {
+            loc %= 8;
+        }
+
+        String four = ((Edge) top.get(loc)).getSc();
+
+        switch (four) {
+            case "g":
+                UPrime();
+                offset += 6;
+                B();
+                B();
+                break;
+
+            case "r":
+
+                R();
+                R();
+                break;
+
+            case "b":
+                U();
+                offset += 2;
+                F();
+                F();
+                break;
+
+            case "o":
+                U();
+                U();
+                offset += 4;
+                L();
+                L();
+                break;
+        }
+
+        loc = 6 + offset;
+
+        if (loc > 8) {
+            loc %= 8;
+        }
+
+        String six = ((Edge) top.get(loc)).getSc();
+
+        switch (six) {
+            case "g":
+                U();
+                U();
+                offset += 4;
+                B();
+                B();
+                break;
+
+            case "r":
+                UPrime();
+                offset += 6;
+                R();
+                R();
+                break;
+
+            case "b":
+
+                F();
+                F();
+                break;
+
+            case "o":
+                U();
+                offset += 2;
+                L();
+                L();
+                break;
+        }
+
+        loc = 8 + offset;
+
+        if (loc > 8) {
+            loc %= 8;
+        }
+
+        String eight = ((Edge) top.get(loc)).getSc();
+
+        switch (eight) {
+            case "g":
+                U();
+                offset += 2;
+                B();
+                B();
+                break;
+
+            case "r":
+                U();
+                U();
+                offset += 4;
+                R();
+                R();
+                break;
+
+            case "b":
+                UPrime();
+                offset += 6;
+                F();
+                F();
+                break;
+
+            case "o":
+                L();
+                L();
+                break;
+        }
+    }
+
+    public void cross() {
+        while (!crossMade()) {
+            startCross();
+        }
+        moves.add("state 1 of cross complete");
+        System.out.println("current cube " + cube);
+        finishCross();
+    }
+
     public boolean crossMade() {
         boolean one = ((Edge) top.get(2)).getFc().equals("w");
         boolean two = ((Edge) top.get(4)).getFc().equals("w");
