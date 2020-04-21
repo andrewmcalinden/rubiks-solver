@@ -1169,6 +1169,8 @@ public class Cube {
     public void finishCross() {
         int offset = 0; // how far away next white piece
 
+        int[] indexes = { 2, 4, 6, 8 };
+
         String two = ((Edge) top.get(2)).getSc();
 
         switch (two) {
@@ -1179,7 +1181,7 @@ public class Cube {
 
             case "r":
                 U();
-                offset += 2;
+                offset += 1;
                 R();
                 R();
                 break;
@@ -1187,127 +1189,201 @@ public class Cube {
             case "b":
                 U();
                 U();
-                offset += 4;
+                offset += 2;
                 F();
                 F();
                 break;
 
             case "o":
                 UPrime();
-                offset += 6;
+                offset += 3;
                 L();
                 L();
                 break;
         }
 
-        int loc = 4 + offset;
+        int start = indexes[(1 + offset) % 4];
 
-        if (loc > 8) {
-            loc %= 8;
-        }
+        System.out.println(start);
 
-        String four = ((Edge) top.get(loc)).getSc();
+        Edge current = ((Edge) top.get(start));
+
+        String four = current.getSc();
 
         switch (four) {
             case "g":
-                UPrime();
-                offset += 6;
+                int target = 2;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 B();
                 B();
                 break;
 
             case "r":
 
+                target = 4;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 R();
                 R();
                 break;
 
             case "b":
-                U();
-                offset += 2;
+                target = 6;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 F();
                 F();
                 break;
 
             case "o":
-                U();
-                U();
-                offset += 4;
+                target = 8;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 L();
                 L();
                 break;
         }
 
-        loc = 6 + offset;
+        start = indexes[(2 + offset) % 4];
 
-        if (loc > 8) {
-            loc %= 8;
-        }
+        System.out.println(start);
 
-        String six = ((Edge) top.get(loc)).getSc();
+        current = ((Edge) top.get(start));
+
+        String six = current.getSc();
 
         switch (six) {
             case "g":
-                U();
-                U();
-                offset += 4;
+                int target = 2;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 B();
                 B();
                 break;
 
             case "r":
-                UPrime();
-                offset += 6;
+                target = 4;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 R();
                 R();
                 break;
 
             case "b":
+                target = 6;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
 
                 F();
                 F();
                 break;
 
             case "o":
-                U();
-                offset += 2;
+                target = 8;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 L();
                 L();
                 break;
         }
 
-        loc = 8 + offset;
+        start = indexes[(3 + offset) % 4];
 
-        if (loc > 8) {
-            loc %= 8;
-        }
+        System.out.println(start);
 
-        String eight = ((Edge) top.get(loc)).getSc();
+        current = ((Edge) top.get(start));
+
+        String eight = ((Edge) top.get(start)).getSc();
 
         switch (eight) {
             case "g":
-                U();
-                offset += 2;
+                int target = 2;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 B();
                 B();
                 break;
 
             case "r":
-                U();
-                U();
-                offset += 4;
+                target = 4;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 R();
                 R();
                 break;
 
             case "b":
-                UPrime();
-                offset += 6;
+                target = 6;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 F();
                 F();
                 break;
 
             case "o":
+                target = 8;
+
+                while (top.indexOf(current) != target) { // while location of edge is not at a known safe
+                                                         // spot, keep twisting
+                    U();
+                    offset++;
+                }
+
                 L();
                 L();
                 break;
@@ -1319,7 +1395,7 @@ public class Cube {
             startCross();
         }
         moves.add("state 1 of cross complete");
-        System.out.println("current cube " + cube);
+        // System.out.println("current cube " + cube);
         finishCross();
     }
 
