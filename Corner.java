@@ -33,6 +33,24 @@ public class Corner {
         fc = s;
     }
 
+    public void switchScVc(){
+        String orig = sc;
+        sc = vc;
+        vc = orig;
+    }
+
+    public void switchScFc() {
+        String orig = sc;
+        sc = fc;
+        fc = orig;
+    }
+
+    public void switchVcFc() {
+        String orig = vc;
+        vc = fc;
+        fc = orig;
+    }
+
     public String toString() {
         return "" + fc + vc + sc;
     }

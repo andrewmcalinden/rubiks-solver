@@ -23,6 +23,12 @@ public class Edge {
         fc = s;
     }
 
+    public void switchScFc() {
+        String orig = sc;
+        sc = fc;
+        fc = orig;
+    }
+
     public String toString() {
         return "" + fc + sc;
     }
