@@ -598,31 +598,10 @@ public class Cube {
     }
 
     public void startCross() {
-
-        List<Integer> avoid = new ArrayList<Integer>();
-
-        List<Integer> safe = new ArrayList<Integer>();
-        safe.add(2);
-        safe.add(4);
-        safe.add(6);
-        safe.add(8);
-
         // put all white pieces around yellow, then rotate to correct center and twist
         // 180 degrees
 
-        // first, check for white in top layer rotated correctly
-        for (int i = 2; i < top.size(); i += 2) {
-
-            Edge current = (Edge) top.get(i);
-
-            if (current.getFc().equals("w")) { // already correctly rotated (white is up)
-                avoid.add(i); // know to avoid messing up this location
-
-            }
-
-        }
-
-        // next, look for white not rotated correcty in top layer
+        // first, look for white not rotated correcty in top layer
         for (int i = 2; i < top.size(); i += 2) {
 
             Edge current = (Edge) top.get(i);
@@ -633,75 +612,26 @@ public class Cube {
 
                     U();
                     U();
-                    // change location to avoid based on moves we did
-                    for (int j = 0; j < avoid.size(); j++) {
-
-                        int set = avoid.get(j) + 2;
-                        if (set == 10) {
-                            set %= 8;
-                        }
-
-                        avoid.set(j, set);
-                    }
                 }
 
-                else if (i == 4) { // as we eventually do uprime, it evens out with the U: dont need to adjust location to avoid
+                else if (i == 4) {
                     U();
                 }
 
-                // if i ==6, we are already rotated in front of blue face
+                // if i ==6, it's already in front of blue face
 
                 else if (i == 8) {
                     UPrime();
-                    for (int j = 0; j < avoid.size(); j++) {
-                        // 2 - 6
-                        // 4 - 8
-                        // 6 - 2
-                        // 8 - 4
-                        int set = (avoid.get(j) + 4) % 8;
-
-                        avoid.set(j, set);
-
-                    }
-                }
-
-                else {// i was 6: did only a UPrime
-                      // 2 - 8
-                      // 4 - 2
-                      // 6 - 4
-                      // 8 - 6
-                    for (int j = 0; j < avoid.size(); j++) {
-
-                        int set = avoid.get(j) - 2;
-
-                        if (set == 0) {
-                            set = 8;
-                        }
-
-                        avoid.set(j, set);
-                    }
-
                 }
                 // then, make it so white faces up
                 F();
                 UPrime();
                 R();
-
-                avoid.add(4); // this will put it at index 4: avoid that index
-
             }
 
         }
 
         moves.add("end top wrong ");
-
-        // change safe spaces based on avoid
-
-        for (int i = safe.size() - 1; i >= 0; i--) {
-            if (avoid.indexOf(safe.get(i)) > -1) {
-                safe.remove(i);
-            }
-        }
 
         // then, look for white in the bottom layer rotated correctly for a 180 degree
         // turn
@@ -711,21 +641,23 @@ public class Cube {
             Edge current = (Edge) bottom.get(i);
 
             if (current.getFc().equals("w")) {
-                int target = safe.get(0);
+                int target = i;
 
                 if (target == 8 || target == 4) {
-                    while (bottom.indexOf(current) != target) { // while location of edge is not at a known safe
-                                                                // spot, keep twisting
-                        D();
+                    while (((Edge) top.get(target)).getFc().equals("w")) { // while place we want to put edge has white,
+                                                                           // keep twisting
+
+                        U();
                     }
                 } else {
-                    while (bottom.indexOf(current) != target) { // while location of edge is not at a known safe
-                                                                // spot, keep twisting
-                        D();
+                    while (((Edge) top.get(target)).getFc().equals("w")) { // while place we want to put edge has white,
+                                                                           // keep twisting
+
+                        U();
                     }
-                    D(); // because indexes 6 and 2 are actually opposite, do D twice to account for the
+                    U(); // because indexes 6 and 2 are actually opposite, do U twice to account for the
                          // offset
-                    D();
+                    U();
                 }
 
                 // then, depending on where we aligned the edge, rotate it to the top layer
@@ -748,11 +680,7 @@ public class Cube {
                     L();
                     L();
                 }
-
-                safe.remove(0); // know know that the spot we put the edge in isnt safe
-
             }
-
         }
 
         moves.add("end bottom right ");
@@ -764,60 +692,54 @@ public class Cube {
             Edge current = (Edge) bottom.get(i);
 
             if (current.getSc().equals("w")) {
-                int target = safe.get(0);
+                int target = i;
 
                 if (target == 8 || target == 4) {
-                    while (bottom.indexOf(current) != target) {
-                        // while location of edge is not at a known safe // spot, keep twisting D();
-                        D();
+                    while (((Edge) top.get(target)).getFc().equals("w")) { // while place we want to put edge has white,
+                                                                           // keep twisting
+
+                        U();
                     }
                 } else {
-                    // while location of edge is not at a known safe spot, keep twisting
-                    while (bottom.indexOf(current) != target) {
 
-                        D();
+                    while (((Edge) top.get(target)).getFc().equals("w")) { // while place we want to put edge has white,
+                                                                           // keep twisting
+
+                        U();
                     }
 
                     // because indexes 6 and 2 are actually opposite, do D twice to account for the
                     // offset
-                    D();
-                    D();
+                    U();
+                    U();
 
                 }
 
                 // then, depending on where we aligned the edge, rotate it to the top layer
                 if (target == 2) {
-                    B();
+                    F();
                     U();
-                    RPrime();
-                    UPrime();
+                    LPrime();
                 }
 
                 if (target == 4) {
                     R();
                     U();
                     FPrime();
-                    UPrime();
                 }
 
                 if (target == 6) {
-                    F();
+                    B();
                     U();
-                    LPrime();
-                    UPrime();
+                    RPrime();
                 }
 
                 if (target == 8) {
                     LPrime();
                     UPrime();
                     F();
-                    U();
                 }
-
-                safe.remove(0); // know know that the spot we put the edge in isnt safe
-
             }
-
         }
 
         moves.add("end bottom wrong ");
@@ -830,7 +752,7 @@ public class Cube {
             Edge current = (Edge) middle.get(i);
 
             if (current.getFc().equals("w") || current.getSc().equals("w")) {
-    
+
                 // cases for each location it could be in
                 switch (i) {
 
@@ -921,7 +843,6 @@ public class Cube {
         }
 
         moves.add("end middle ");
-
 
     }
 

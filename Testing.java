@@ -3,7 +3,11 @@ public class Testing {
     public static void main(String[] args) {
 
         Cube cube = new Cube();
-        cube.scramble("R R F F R R U R R B B D U U L L U' R D D U F R' B B U' F U' R R");
+
+        cube.scramble("B R R D D F' R R B L L F R R U' F' U L' F F L D D R' U L' F");
+        System.out.println(cube);
+
+        cube.cross();
         System.out.println(cube);
 
     }
