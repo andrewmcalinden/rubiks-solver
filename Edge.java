@@ -29,6 +29,14 @@ public class Edge {
         fc = orig;
     }
 
+    public boolean has(String s) {
+        return (sc.equals(s) || fc.equals(s));
+    }
+
+    public boolean equals(Corner corner) {
+        return (fc.equals(corner.getFc()) && sc.equals(corner.getSc()));
+    }
+
     public String toString() {
         return "" + fc + sc;
     }

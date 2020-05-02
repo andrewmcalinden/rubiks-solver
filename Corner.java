@@ -51,6 +51,14 @@ public class Corner {
         fc = orig;
     }
 
+    public boolean has(String s){
+        return (sc.equals(s) || vc.equals(s) || fc.equals(s));
+    }
+
+    public boolean equals(Corner corner){
+        return (fc.equals(corner.getFc()) && vc.equals(corner.getVc()) && sc.equals(corner.getSc()));
+    }
+
     public String toString() {
         return "" + fc + vc + sc;
     }

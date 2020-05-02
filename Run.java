@@ -1,27 +1,22 @@
 import java.util.ArrayList;
-
 public class Run {
 
     public static void main(String [] args) {
-        int [] nums = {4, 5, 7, 11, 9, 13, 10, 8, 12};
-        int target = 20;
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(6);
+        list.add(4);
+        list.add(3);
+        list.add(8);
+        list.add(5);
+        list.add(6);
+        System.out.println(list);
 
-        for (int i = 0; i < nums.length; i++){
-            int num1 = nums[i];
-            for (int j = 0; j < i; j++){
-                int num2 = nums[j];
+        list.add(2, 5);
+        System.out.println(list);
 
-                if (num1 + num2 == target){
-                    if (num1 > num2){
-                        System.out.println(num1 + ", " + num2);
-                    }
 
-                    else{
-                        System.out.println(num2 + ", " + num1);
-                    }
-                }
-            }
-        }        
+
+
 
     }
 

@@ -47,6 +47,8 @@ public class Cube {
 
     private List<List<Object>> cube;
 
+    private List<Integer> unsolved;
+
     public Cube() {
         botCenter = new Center("w");
 
@@ -124,6 +126,13 @@ public class Cube {
         cube.add(top);
 
         moves = new ArrayList<String>();
+
+        unsolved = new ArrayList<Integer>();
+        unsolved.add(1);
+        unsolved.add(3);
+        unsolved.add(5);
+        unsolved.add(7);
+
     }
 
     public void D() {
@@ -751,7 +760,7 @@ public class Cube {
 
             Edge current = (Edge) middle.get(i);
 
-            if (current.getFc().equals("w") || current.getSc().equals("w")) {
+            if (current.has("w")) {
 
                 // cases for each location it could be in
                 switch (i) {
@@ -1070,6 +1079,7 @@ public class Cube {
         }
         moves.add("state 1 of cross complete");
         finishCross();
+        moves.add("cross done");
     }
 
     public boolean crossMade() {
@@ -1079,6 +1089,388 @@ public class Cube {
         boolean four = ((Edge) top.get(8)).getFc().equals("w");
 
         return (one && two && three && four);
+    }
+
+    public void bottomCorners() {
+
+        Corner one = new Corner("w", "b", "o");
+        Corner two = new Corner("w", "b", "r");
+        Corner three = new Corner("w", "g", "r");
+        Corner four = new Corner("w", "g", "o");
+
+        Corner real1 = (Corner) bottom.get(1);
+        Corner real2 = (Corner) bottom.get(3);
+        Corner real3 = (Corner) bottom.get(5);
+        Corner real4 = (Corner) bottom.get(7);
+
+        if (real1.equals(one)) {
+            unsolved.remove(0);
+        }
+
+        if (real2.equals(two)) {
+            unsolved.remove(1);
+        }
+
+        if (real3.equals(three)) {
+            unsolved.remove(2);
+        }
+
+        if (real4.equals(four)) {
+            unsolved.remove(3);
+        }
+
+        while (!bottomCornersDone()) {
+            while (whiteInTop()) {
+                insertCornersInTop();
+            }
+            bringCornersIntoTop();
+        }
+
+        moves.add("first layer done ");
+    }
+
+    public boolean whiteInTop() {
+        for (int i = 1; i < top.size(); i += 2) {
+            Corner current = (Corner) top.get(i);
+
+            if (current.has("w")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void insertCornersInTop() {
+
+        // insert corners in top layer
+        for (int i = 1; i < top.size(); i += 2) {
+            Corner current = ((Corner) top.get(i));
+
+            if (current.getFc().equals("w")) {
+                String c1 = current.getSc();
+                String c2 = current.getVc();
+
+                if ((c1.equals("b") || c1.equals("r")) && (c2.equals("r") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 5) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(3)).getFc().equals("w")) {
+                        R();
+                        U();
+                        RPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(3); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+                }
+
+                else if ((c1.equals("b") || c1.equals("o")) && (c2.equals("o") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 7) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(1)).getFc().equals("w")) {
+                        F();
+                        U();
+                        FPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(1); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+                }
+
+                else if ((c1.equals("r") || c1.equals("g")) && (c2.equals("g") || c2.equals("r"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 3) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(5)).getFc().equals("w")) {
+                        B();
+                        U();
+                        BPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(5); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+                }
+
+                // colors were blue and orange
+                else {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 1) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(7)).getFc().equals("w")) {
+                        L();
+                        U();
+                        LPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(7); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+            }
+
+            else if (current.getVc().equals("w")) {
+                String c1 = current.getFc();
+                String c2 = current.getSc();
+
+                if ((c1.equals("b") || c1.equals("r")) && (c2.equals("r") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 5) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(3)).getFc().equals("w")) {
+                        R();
+                        U();
+                        RPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(3); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                else if ((c1.equals("b") || c1.equals("o")) && (c2.equals("o") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 7) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(1)).getFc().equals("w")) {
+                        F();
+                        U();
+                        FPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(1); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                else if ((c1.equals("r") || c1.equals("g")) && (c2.equals("g") || c2.equals("r"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 3) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(5)).getFc().equals("w")) {
+                        B();
+                        U();
+                        BPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(5); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                // colors were blue and orange
+                else {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 1) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(7)).getFc().equals("w")) {
+                        L();
+                        U();
+                        LPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(7); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+            }
+
+            else if (current.getSc().equals("w")) {
+                String c1 = current.getFc();
+                String c2 = current.getVc();
+
+                if ((c1.equals("b") || c1.equals("r")) && (c2.equals("r") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 5) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(3)).getFc().equals("w")) {
+                        R();
+                        U();
+                        RPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(3); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                else if ((c1.equals("b") || c1.equals("o")) && (c2.equals("o") || c2.equals("b"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 7) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(1)).getFc().equals("w")) {
+                        F();
+                        U();
+                        FPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(1); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                else if ((c1.equals("r") || c1.equals("g")) && (c2.equals("g") || c2.equals("r"))) {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 3) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(5)).getFc().equals("w")) {
+                        B();
+                        U();
+                        BPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(5); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+
+                }
+
+                // colors were blue and orange
+                else {
+                    // rotate corner above where it needs to go in
+                    while (top.indexOf(current) != 1) {
+                        U();
+                    }
+                    // then insert it in
+                    while (!((Corner) bottom.get(7)).getFc().equals("w")) {
+                        L();
+                        U();
+                        LPrime();
+                        UPrime();
+                    }
+
+                    int loc = unsolved.indexOf(7); // index of 3 in unsolved
+
+                    if (loc > -1) { // if 3 was unsolved
+                        unsolved.remove(loc); // now it's solved
+                    }
+                }
+
+            }
+
+        }
+    }
+
+    public void bringCornersIntoTop() {
+        // bring incorrectly rotated corners up to top layer
+        for (int i = 1; i < bottom.size(); i += 2) {
+            Corner current = (Corner) bottom.get(i);
+
+            if (current.has("w") && unsolved.indexOf(i) >= 0) {
+                switch (i) {
+                    case 1:
+                        LPrime();
+                        UPrime();
+                        L();
+                        U();
+                        break;
+
+                    case 3:
+                        R();
+                        U();
+                        RPrime();
+                        UPrime();
+                        break;
+
+                    case 5:
+                        B();
+                        U();
+                        BPrime();
+                        UPrime();
+                        break;
+
+                    case 7:
+                        L();
+                        UPrime();
+                        LPrime();
+                        U();
+                        break;
+
+                }
+            }
+        }
+
+    }
+
+    public boolean bottomCornersDone() {
+        Corner one = new Corner("w", "b", "o");
+        Corner two = new Corner("w", "b", "r");
+        Corner three = new Corner("w", "g", "r");
+        Corner four = new Corner("w", "g", "o");
+
+        Corner real1 = (Corner) bottom.get(1);
+        Corner real2 = (Corner) bottom.get(3);
+        Corner real3 = (Corner) bottom.get(5);
+        Corner real4 = (Corner) bottom.get(7);
+
+        return (one.equals(real1) && two.equals(real2) && three.equals(real3) && four.equals(real4));
     }
 
     public void update() {
