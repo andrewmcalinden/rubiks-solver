@@ -19,6 +19,6 @@ public class Testing {
 
 
         //correct: U , U , U , F , U , F' , U , U , L , U , L' , R , U , R' , U' , B , U , B' , U' , U , R , U , U , R' , U' , R , U , R' , U' , R' , U , R 
-
+        //maybeno: U , U , U , F , U , F' , U , U , L , U , L' , R , U , R' , U' , B , U , B' , U' , U , R , U , U , R' , U' , R , U , R' , U' , R' , U , R 
     }
 }

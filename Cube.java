@@ -1193,13 +1193,7 @@ public class Cube {
                         UPrime();
                         R();
                     }
-
-                    // idk why first 2 lines are needed, but scared to delete :/
-                    int loc = unsolvedBottomCorners.indexOf(3);
-
-                    if (loc > -1) { // if 3 was unsolved
-                        unsolvedBottomCorners.remove(loc); // now it's solved
-                    }
+                    unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(3)); // now index 3 is solved
                 }
 
                 else if ((c1.equals("b") || c1.equals("o")) && (c2.equals("o") || c2.equals("b"))) {
@@ -1228,11 +1222,7 @@ public class Cube {
                         FPrime();
                     }
 
-                    int loc = unsolvedBottomCorners.indexOf(1);
-
-                    if (loc > -1) { // if 3 was unsolved
-                        unsolvedBottomCorners.remove(loc); // now it's solved
-                    }
+                    unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(1)); // now index 1 is solved
                 }
 
                 else if ((c1.equals("r") || c1.equals("g")) && (c2.equals("g") || c2.equals("r"))) {
@@ -1262,11 +1252,7 @@ public class Cube {
                         R();
                     }
 
-                    int loc = unsolvedBottomCorners.indexOf(5);
-
-                    if (loc > -1) { // if 3 was unsolved
-                        unsolvedBottomCorners.remove(loc); // now it's solved
-                    }
+                    unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(5)); // now index 5 is solved
                 }
 
                 // colors were green and orange
@@ -1295,12 +1281,7 @@ public class Cube {
                         UPrime();
                         LPrime();
                     }
-
-                    int loc = unsolvedBottomCorners.indexOf(7);
-
-                    if (loc > -1) { // if 3 was unsolved
-                        unsolvedBottomCorners.remove(loc); // now it's solved
-                    }
+                    unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(7)); // now index 7 is solved
 
                 }
             }
