@@ -33,8 +33,8 @@ public class Edge {
         return (sc.equals(s) || fc.equals(s));
     }
 
-    public boolean equals(Corner corner) {
-        return (fc.equals(corner.getFc()) && sc.equals(corner.getSc()));
+    public boolean equals(Edge edge) {
+        return (fc.equals(edge.getFc()) && sc.equals(edge.getSc()));
     }
 
     public String toString() {

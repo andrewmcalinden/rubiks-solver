@@ -1145,6 +1145,17 @@ public class Cube {
         return false;
     }
 
+    public boolean nonYellowInTop() {
+        for (int i = 2; i < top.size(); i += 2) {
+            Edge current = (Edge) top.get(i);
+
+            if (!(current.has("y"))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void insertCornersInBottom() {
 
         // insert corners in top layer
@@ -1328,6 +1339,80 @@ public class Cube {
 
     }
 
+    public void bringEdgesIntoTop() {
+        // bring incorrectly rotated corners up to top layer
+        for (int i = 1; i < middle.size(); i += 2) {
+            Center center1 = (Center) middle.get(i - 1);
+            Edge current = (Edge) middle.get(i);
+            Center center2;
+            if (i == 7){
+                center2 = (Center) middle.get(0);
+            }
+            else{
+                center2 = (Center) middle.get(i + 1);
+            }
+            
+            String c1 = center1.getColor();
+            String e1 = current.getFc();
+            String e2 = current.getSc();
+            String c2 = center2.getColor();
+
+            if ((!((current.has("y"))) && (unsolvedBottomCorners.indexOf(i) >= 0)) || ()) { // if it doesn't have yellow
+                                                                                    // (belongs in middle), bring it to
+                                                                                    // the top
+                switch (i) {
+                    case 1:
+                        U();
+                        R();
+                        U();
+                        RPrime();
+                        UPrime();
+                        FPrime();
+                        UPrime();
+                        F();
+                        break;
+
+                    case 3:
+                        UPrime();
+                        B();
+                        U();
+                        BPrime();
+                        UPrime();
+                        RPrime();
+                        UPrime();
+                        R();
+                        break;
+
+                    case 5:
+                        U();
+                        L();
+                        U();
+                        LPrime();
+                        UPrime();
+                        BPrime();
+                        UPrime();
+                        B();
+                        break;
+
+                    case 7:
+                        UPrime();
+                        LPrime();
+                        UPrime();
+                        L();
+                        U();
+                        F();
+                        U();
+                        FPrime();L();
+                        UPrime();
+                        LPrime();
+                        U();
+                        break;
+                }
+            }
+        }
+
+    }
+
     public boolean bottomCornersDone() {
         Corner one = new Corner("w", "b", "o");
         Corner two = new Corner("w", "b", "r");
@@ -1342,23 +1427,23 @@ public class Cube {
         return (one.equals(real1) && two.equals(real2) && three.equals(real3) && four.equals(real4));
     }
 
-    public void insertEdges(){
-        for (int i = 2; i < top.size(); i += 2){
-            Edge current = (Edge)(top.get(i));
+    public void insertEdges() {
+        for (int i = 2; i < top.size(); i += 2) {
+            Edge current = (Edge) (top.get(i));
 
-            if (!(current.has("y"))){
+            if (!(current.has("y"))) {
                 String c1 = current.getFc();
                 String c2 = current.getSc();
 
                 int target;
-                if (c2.equals("b")){
+                if (c2.equals("b")) {
                     // rotate edge until in correct spot
                     target = 6;
                     while (top.indexOf(current) != target) {
                         U();
                     }
 
-                    if (c1.equals("r")){
+                    if (c1.equals("r")) {
                         U();
                         R();
                         U();
@@ -1367,14 +1452,9 @@ public class Cube {
                         FPrime();
                         UPrime();
                         F();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(1)); // now index 1 is solved
 
-                        // int loc = unsolvedBottomCorners.indexOf(3);
-
-                        // if (loc > -1) { // if 3 was unsolved
-                        //     unsolvedBottomCorners.remove(loc); // now it's solved
-                        // }
-                    }
-                    else{ //c1 was orange
+                    } else { // c1 was orange
                         UPrime();
                         LPrime();
                         UPrime();
@@ -1383,10 +1463,11 @@ public class Cube {
                         F();
                         U();
                         FPrime();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(7)); // now index 7 is solved
                     }
                 }
 
-                else if(c2.equals("r")){
+                else if (c2.equals("r")) {
                     // rotate edge until in correct spot
                     target = 4;
                     while (top.indexOf(current) != target) {
@@ -1402,8 +1483,10 @@ public class Cube {
                         R();
                         U();
                         RPrime();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(1)); // now index 1 is solved
+
                     } else { // c1 was green
-                        UPrime();
+                        U();
                         B();
                         U();
                         BPrime();
@@ -1411,6 +1494,7 @@ public class Cube {
                         RPrime();
                         UPrime();
                         R();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(3)); // now index 3 is solved
                     }
                 }
 
@@ -1430,6 +1514,7 @@ public class Cube {
                         B();
                         U();
                         BPrime();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(3)); // now index 3 is solved
                     } else { // c1 was orange
                         U();
                         L();
@@ -1439,10 +1524,11 @@ public class Cube {
                         BPrime();
                         UPrime();
                         B();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(5)); // now index 5 is solved
                     }
                 }
 
-                else{ //c2 was orange
+                else { // c2 was orange
                        // rotate edge until in correct spot
                     target = 8;
                     while (top.indexOf(current) != target) {
@@ -1458,6 +1544,7 @@ public class Cube {
                         L();
                         U();
                         LPrime();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(5)); // now index 5 is solved
                     } else { // c1 was blue
                         U();
                         F();
@@ -1467,13 +1554,14 @@ public class Cube {
                         LPrime();
                         UPrime();
                         L();
+                        unsolvedEdges.remove(unsolvedEdges.indexOf(7)); // now index 7 is solved
                     }
-                }      
+                }
             }
         }
     }
 
-    public boolean secondLayerDone(){
+    public boolean secondLayerDone() {
         Edge one = new Edge("b", "r");
         Edge two = new Edge("r", "g");
         Edge three = new Edge("g", "o");
@@ -1487,13 +1575,13 @@ public class Cube {
         return (one.equals(real1) && two.equals(real2) && three.equals(real3) && four.equals(real4));
     }
 
-    public void putEdgesIntoTop(){
-        for (int i = 1; i < middle.size(); i += 2){
-            
+    public void putEdgesIntoTop() {
+        for (int i = 1; i < middle.size(); i += 2) {
+
         }
     }
 
-    public void secondLayer(){
+    public void secondLayer() {
         Edge one = new Edge("b", "r");
         Edge two = new Edge("r", "g");
         Edge three = new Edge("g", "o");
@@ -1520,7 +1608,14 @@ public class Cube {
             unsolvedEdges.add(7);
         }
 
-
+        while (!secondLayerDone()) {
+            while (nonYellowInTop()) {
+                insertEdges();
+                System.out.println(this);
+            }
+            bringEdgesIntoTop();
+        }
+        moves.add("second layer done ");
     }
 
     public void update() {
