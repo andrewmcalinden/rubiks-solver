@@ -48,7 +48,6 @@ public class Cube {
     private List<List<Object>> cube;
 
     private List<Integer> unsolvedBottomCorners;
-    private List<Integer> unsolvedEdges;
 
     private boolean crossTelem;
 
@@ -131,7 +130,6 @@ public class Cube {
         moves = new ArrayList<String>();
 
         unsolvedBottomCorners = new ArrayList<Integer>();
-        unsolvedEdges = new ArrayList<Integer>();
 
         crossTelem = false;
     }
@@ -1345,24 +1343,20 @@ public class Cube {
             Center center1 = (Center) middle.get(i - 1);
             Edge current = (Edge) middle.get(i);
             Center center2;
-            if (i == 7){
+            if (i == 7) {
                 center2 = (Center) middle.get(0);
-            }
-            else{
+            } else {
                 center2 = (Center) middle.get(i + 1);
             }
-            
+
             String c1 = center1.getColor();
             String e1 = current.getFc();
             String e2 = current.getSc();
             String c2 = center2.getColor();
 
-            if ((!((current.has("y"))) && (unsolvedBottomCorners.indexOf(i) >= 0)) || ()) { // if it doesn't have yellow
-                                                                                    // (belongs in middle), bring it to
-                                                                                    // the top
+            if ((!(c1.equals(e1))) || (!(c2.equals(e2)))) {
                 switch (i) {
                     case 1:
-                        U();
                         R();
                         U();
                         RPrime();
@@ -1373,7 +1367,6 @@ public class Cube {
                         break;
 
                     case 3:
-                        UPrime();
                         B();
                         U();
                         BPrime();
@@ -1384,7 +1377,6 @@ public class Cube {
                         break;
 
                     case 5:
-                        U();
                         L();
                         U();
                         LPrime();
@@ -1395,14 +1387,14 @@ public class Cube {
                         break;
 
                     case 7:
-                        UPrime();
                         LPrime();
                         UPrime();
                         L();
                         U();
                         F();
                         U();
-                        FPrime();L();
+                        FPrime();
+                        L();
                         UPrime();
                         LPrime();
                         U();
@@ -1452,8 +1444,6 @@ public class Cube {
                         FPrime();
                         UPrime();
                         F();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(1)); // now index 1 is solved
-
                     } else { // c1 was orange
                         UPrime();
                         LPrime();
@@ -1463,7 +1453,6 @@ public class Cube {
                         F();
                         U();
                         FPrime();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(7)); // now index 7 is solved
                     }
                 }
 
@@ -1483,8 +1472,6 @@ public class Cube {
                         R();
                         U();
                         RPrime();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(1)); // now index 1 is solved
-
                     } else { // c1 was green
                         U();
                         B();
@@ -1494,7 +1481,6 @@ public class Cube {
                         RPrime();
                         UPrime();
                         R();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(3)); // now index 3 is solved
                     }
                 }
 
@@ -1514,7 +1500,6 @@ public class Cube {
                         B();
                         U();
                         BPrime();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(3)); // now index 3 is solved
                     } else { // c1 was orange
                         U();
                         L();
@@ -1524,7 +1509,6 @@ public class Cube {
                         BPrime();
                         UPrime();
                         B();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(5)); // now index 5 is solved
                     }
                 }
 
@@ -1544,7 +1528,6 @@ public class Cube {
                         L();
                         U();
                         LPrime();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(5)); // now index 5 is solved
                     } else { // c1 was blue
                         U();
                         F();
@@ -1554,7 +1537,6 @@ public class Cube {
                         LPrime();
                         UPrime();
                         L();
-                        unsolvedEdges.remove(unsolvedEdges.indexOf(7)); // now index 7 is solved
                     }
                 }
             }
@@ -1582,36 +1564,9 @@ public class Cube {
     }
 
     public void secondLayer() {
-        Edge one = new Edge("b", "r");
-        Edge two = new Edge("r", "g");
-        Edge three = new Edge("g", "o");
-        Edge four = new Edge("o", "b");
-
-        Edge real1 = (Edge) middle.get(1);
-        Edge real2 = (Edge) middle.get(3);
-        Edge real3 = (Edge) middle.get(5);
-        Edge real4 = (Edge) middle.get(7);
-
-        if (!(real1.equals(one))) {
-            unsolvedEdges.add(1);
-        }
-
-        if (!(real2.equals(two))) {
-            unsolvedEdges.add(3);
-        }
-
-        if (!(real3.equals(three))) {
-            unsolvedEdges.add(5);
-        }
-
-        if (!(real4.equals(four))) {
-            unsolvedEdges.add(7);
-        }
-
         while (!secondLayerDone()) {
             while (nonYellowInTop()) {
                 insertEdges();
-                System.out.println(this);
             }
             bringEdgesIntoTop();
         }
