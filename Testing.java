@@ -21,5 +21,8 @@ public class Testing {
         cube.secondLayer();
         System.out.println("After second layer: " + cube + "\n");
 
+        cube.topCross();
+        System.out.println("After top cross: " + cube + "\n");
+
     }
 }

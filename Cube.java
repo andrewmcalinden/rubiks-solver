@@ -1573,6 +1573,141 @@ public class Cube {
         moves.add("second layer done ");
     }
 
+    public void topCross(){
+        ArrayList <Integer> yellowUpLocations = new ArrayList<Integer>();
+
+        for (int i = 2; i < top.size(); i += 2){
+            Edge current = (Edge)top.get(i);
+            if (current.getFc().equals("y")){
+                yellowUpLocations.add(i);
+            }
+        }
+
+        if (yellowUpLocations.size() == 4){ //already done
+            //do nothing
+            int num = 0;
+        }
+
+        else if (yellowUpLocations.size() == 0){ //if no edges were correctly oriented
+            F();
+            R();
+            U();
+            RPrime();
+            UPrime();
+            FPrime();
+            B();
+            U();
+            L();
+            UPrime();
+            LPrime();
+            BPrime();
+        }
+
+        else{ //2 were yellow
+            int diff = Math.abs(yellowUpLocations.get(0) - yellowUpLocations.get(1));
+            if (diff == 2){ //edges were right next to each other
+                String four = ((Edge) top.get(4)).getFc();
+                String six = ((Edge) top.get(6)).getFc();
+                
+
+                while (!(four.equals("y") && six.equals("y"))){ //while the yellows arent in the right location
+                    U();
+                    four = ((Edge) top.get(4)).getFc();
+                    six = ((Edge) top.get(6)).getFc();
+                }
+
+                B();
+                U();
+                L();
+                UPrime();
+                LPrime();
+                BPrime();
+            }
+
+            else{ //edges are across from each other
+                String eight = ((Edge) top.get(8)).getFc();
+                String four = ((Edge) top.get(4)).getFc();
+
+                while (!(four.equals("y") && eight.equals("y"))) { // while the yellows arent in the right
+                                                                                 // location
+                    U();
+                    four = ((Edge) top.get(4)).getFc();
+                    eight = ((Edge) top.get(8)).getFc();
+                }
+
+                F();
+                R();
+                U();
+                RPrime();
+                UPrime();
+                FPrime();
+            }
+        }
+    }
+
+    public void topCorners(){
+        ArrayList<Integer> yellowUpLocations = new ArrayList<Integer>();
+
+        for (int i = 1; i < top.size(); i += 2) {
+            Corner current = (Corner) top.get(i);
+            if (current.getFc().equals("y")) {
+                yellowUpLocations.add(i);
+            }
+        }
+
+        if (yellowUpLocations.size() == 0){
+            int sc = 0;
+            int vc = 0;
+            for (int i = 1; i < top.size(); i += 2) {
+                Corner current = (Corner) top.get(i);
+                if (current.getVc().equals("y")){
+                    vc++;
+                }
+                else{//fc was yellow
+                    sc++;
+                }
+            }
+
+            if (sc == 2 && vc == 2){ //case 22
+                while (!(((Corner)top.get(1)).getSc().equals("y") && ((Corner)top.get(7)).getSc().equals("y"))){
+                    U();
+                }
+                R();
+                U();
+                U();
+                R();
+                R();
+                UPrime();
+                R();
+                R();
+                UPrime();
+                R();
+                R();
+                U();
+                U();
+                R();
+            }
+
+            else{//vc or sc was 4, case 21
+                while (!(((Corner)top.get(1)).getVc().equals("y"))){
+                    U();
+                }
+                R();
+                U();
+                U();
+                RPrime();
+                UPrime();
+                R();
+                U();
+                RPrime();
+                UPrime();
+                R();
+                U();
+                RPrime();
+            }
+        }
+    }
+
     public void update() {
         cube.clear();
 
