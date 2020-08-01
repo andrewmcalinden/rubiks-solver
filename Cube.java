@@ -670,8 +670,8 @@ public class Cube {
 
                 // then, depending on where we aligned the edge, rotate it to the top layer
                 if (target == 2) {
-                    B();
-                    B();
+                    F();
+                    F();
                 }
 
                 if (target == 4) {
@@ -680,8 +680,8 @@ public class Cube {
                 }
 
                 if (target == 6) {
-                    F();
-                    F();
+                    B();
+                    B();
                 }
 
                 if (target == 8) {
@@ -1573,22 +1573,22 @@ public class Cube {
         moves.add("second layer done ");
     }
 
-    public void topCross(){
-        ArrayList <Integer> yellowUpLocations = new ArrayList<Integer>();
+    public void topCross() {
+        ArrayList<Integer> yellowUpLocations = new ArrayList<Integer>();
 
-        for (int i = 2; i < top.size(); i += 2){
-            Edge current = (Edge)top.get(i);
-            if (current.getFc().equals("y")){
+        for (int i = 2; i < top.size(); i += 2) {
+            Edge current = (Edge) top.get(i);
+            if (current.getFc().equals("y")) {
                 yellowUpLocations.add(i);
             }
         }
 
-        if (yellowUpLocations.size() == 4){ //already done
-            //do nothing
+        if (yellowUpLocations.size() == 4) { // already done
+            // do nothing
             int num = 0;
         }
 
-        else if (yellowUpLocations.size() == 0){ //if no edges were correctly oriented
+        else if (yellowUpLocations.size() == 0) { // if no edges were correctly oriented
             F();
             R();
             U();
@@ -1603,14 +1603,13 @@ public class Cube {
             BPrime();
         }
 
-        else{ //2 were yellow
+        else { // 2 were yellow
             int diff = Math.abs(yellowUpLocations.get(0) - yellowUpLocations.get(1));
-            if (diff == 2){ //edges were right next to each other
+            if (diff == 2) { // edges were right next to each other
                 String four = ((Edge) top.get(4)).getFc();
                 String six = ((Edge) top.get(6)).getFc();
-                
 
-                while (!(four.equals("y") && six.equals("y"))){ //while the yellows arent in the right location
+                while (!(four.equals("y") && six.equals("y"))) { // while the yellows arent in the right location
                     U();
                     four = ((Edge) top.get(4)).getFc();
                     six = ((Edge) top.get(6)).getFc();
@@ -1624,12 +1623,12 @@ public class Cube {
                 BPrime();
             }
 
-            else{ //edges are across from each other
+            else { // edges are across from each other
                 String eight = ((Edge) top.get(8)).getFc();
                 String four = ((Edge) top.get(4)).getFc();
 
                 while (!(four.equals("y") && eight.equals("y"))) { // while the yellows arent in the right
-                                                                                 // location
+                                                                   // location
                     U();
                     four = ((Edge) top.get(4)).getFc();
                     eight = ((Edge) top.get(8)).getFc();
@@ -1643,9 +1642,10 @@ public class Cube {
                 FPrime();
             }
         }
+        moves.add(" top cross done");
     }
 
-    public void topCorners(){
+    public void topCorners() {
         ArrayList<Integer> yellowUpLocations = new ArrayList<Integer>();
 
         for (int i = 1; i < top.size(); i += 2) {
@@ -1655,21 +1655,20 @@ public class Cube {
             }
         }
 
-        if (yellowUpLocations.size() == 0){
+        if (yellowUpLocations.size() == 0) { // case 21 and 22
             int sc = 0;
             int vc = 0;
             for (int i = 1; i < top.size(); i += 2) {
                 Corner current = (Corner) top.get(i);
-                if (current.getVc().equals("y")){
+                if (current.getVc().equals("y")) {
                     vc++;
-                }
-                else{//fc was yellow
+                } else if (current.getSc().equals("y")) {
                     sc++;
                 }
             }
 
-            if (sc == 2 && vc == 2){ //case 22
-                while (!(((Corner)top.get(1)).getSc().equals("y") && ((Corner)top.get(7)).getSc().equals("y"))){
+            if (sc == 2 && vc == 2) { // case 22
+                while (!(((Corner) top.get(1)).getSc().equals("y") && ((Corner) top.get(7)).getSc().equals("y"))) {
                     U();
                 }
                 R();
@@ -1688,8 +1687,8 @@ public class Cube {
                 R();
             }
 
-            else{//vc or sc was 4, case 21
-                while (!(((Corner)top.get(1)).getVc().equals("y"))){
+            else {// vc or sc was 4, case 21
+                while (!(((Corner) top.get(1)).getVc().equals("y"))) {
                     U();
                 }
                 R();
@@ -1706,6 +1705,113 @@ public class Cube {
                 RPrime();
             }
         }
+
+        else if (yellowUpLocations.size() == 1) { // sune or antisune
+            // see if it is sune or antisune
+            while (!(((Corner) top.get(1)).getFc().equals("y"))) {
+                U();
+            }
+
+            if (((Corner) top.get(3)).getVc().equals("y")) { // antisune
+                RPrime();
+                UPrime();
+                R();
+                UPrime();
+                RPrime();
+                U();
+                U();
+                R();
+            }
+
+            else { // sune
+                while (!(((Corner) top.get(7)).getFc().equals("y"))) {
+                    U();
+                }
+                R();
+                U();
+                RPrime();
+                U();
+                R();
+                U();
+                U();
+                RPrime();
+
+            }
+
+        }
+
+        else if (yellowUpLocations.size() == 2) { // cases 23, 24, 25
+            // see if it is case 25
+            boolean twoFive = false;
+            int diff = yellowUpLocations.get(0) - yellowUpLocations.get(1);
+            if (Math.abs(diff) == 4) {
+                twoFive = true;
+            }
+
+            if (twoFive) {
+                while (!((Corner) top.get(3)).getSc().equals("y")) {
+                    U();
+                }
+                RPrime();
+                F();
+                R();
+                BPrime();
+                RPrime();
+                FPrime();
+                R();
+                B();
+            }
+
+            else {
+                // find if it is case 23 or 24
+                while (!((((Corner) top.get(1)).getFc().equals("y")) && (((Corner) top.get(3)).getFc().equals("y")))) {
+                    U();
+                }
+
+                int sc = 0;
+                int vc = 0;
+                if (((Corner) top.get(5)).getSc().equals("y")) {
+                    sc++;
+                } else {
+                    vc++;
+                }
+
+                if (((Corner) top.get(7)).getSc().equals("y")) {
+                    sc++;
+                } else {
+                    vc++;
+                }
+
+                if (sc == 2) {// case 24
+                    UPrime(); // make it look like the starting picture
+
+                    RPrime();
+                    FPrime();
+                    L();
+                    F();
+                    R();
+                    FPrime();
+                    LPrime();
+                    F();
+                }
+
+                else { // vc was 2, case 23
+                    R();
+                    R();
+                    D();
+                    RPrime();
+                    U();
+                    U();
+                    R();
+                    DPrime();
+                    RPrime();
+                    U();
+                    U();
+                    RPrime();
+                }
+            }
+        }
+        moves.add(" top corners done");
     }
 
     public void update() {
