@@ -1,6 +1,7 @@
 import java.util.List;
-import java.util.concurrent.TransferQueue;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Cube {
 
@@ -44,11 +45,13 @@ public class Cube {
 
     private List<Object> top;
 
-    private List<String> moves;
+    public List<String> moves;
 
     private List<List<Object>> cube;
 
     private List<Integer> unsolvedBottomCorners;
+
+    public List<List<Object>> solvedState;
 
     private boolean crossTelem;
 
@@ -111,7 +114,6 @@ public class Cube {
         edgeTop4 = new Edge("y", "o");
 
         top = new ArrayList<Object>();
-
         top.add(topCenter);
         top.add(cornerTop1);
         top.add(edgeTop1);
@@ -123,16 +125,23 @@ public class Cube {
         top.add(edgeTop4);
 
         cube = new ArrayList<List<Object>>(3);
-
         cube.add(bottom);
         cube.add(middle);
         cube.add(top);
+
+        solvedState = Collections.unmodifiableList(cube);
 
         moves = new ArrayList<String>();
 
         unsolvedBottomCorners = new ArrayList<Integer>();
 
         crossTelem = false;
+    }
+
+    public boolean isSolved() {
+        System.out.println("correct: " + solvedState);
+        System.out.println("cube: " + cube);
+        return (solvedState.equals(cube));
     }
 
     public void D() {
@@ -1159,9 +1168,11 @@ public class Cube {
 
         // insert corners in top layer
         for (int i = 1; i < top.size(); i += 2) {
+            System.out.println(this);
+            
             Corner current = ((Corner) top.get(i));
-
             if (current.has("w")) {
+                System.out.println("corner " + current + " " + i);
 
                 String c1 = "";
                 String c2 = "";
@@ -1199,10 +1210,11 @@ public class Cube {
                         RPrime();
                     } else { // Vc was white
                         U();
-                        RPrime();
-                        UPrime();
                         R();
+                        UPrime();
+                        RPrime();
                     }
+                    
                     unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(3)); // now index 3 is solved
                 }
 
@@ -1223,7 +1235,7 @@ public class Cube {
                         FPrime();
                     } else if (current.getSc().equals("w")) {
                         U();
-                        FPrime();
+                        F();
                         UPrime();
                         FPrime();
                     } else { // Vc was white
@@ -1261,7 +1273,6 @@ public class Cube {
                         U();
                         R();
                     }
-
                     unsolvedBottomCorners.remove(unsolvedBottomCorners.indexOf(5)); // now index 5 is solved
                 }
 
@@ -1395,7 +1406,7 @@ public class Cube {
                         LPrime();
                         UPrime();
                         L();
-                        
+
                         break;
                 }
             }
@@ -1583,7 +1594,6 @@ public class Cube {
 
         if (yellowUpLocations.size() == 4) { // already done
             // do nothing
-            int num = 0;
         }
 
         else if (yellowUpLocations.size() == 0) { // if no edges were correctly oriented
@@ -1813,6 +1823,25 @@ public class Cube {
     }
 
     public void headlights() {
+        
+        // check to see if we got headlights skip: if so, we dont need to do any
+        // algorithms
+        String backLeft = ((Corner) top.get(1)).getVc();
+        String backRight = ((Corner) top.get(3)).getVc();
+
+        String rightTop = ((Corner) top.get(3)).getSc();
+        String rightBottom = ((Corner) top.get(5)).getSc();      
+
+        String frontLeft = ((Corner) top.get(7)).getVc();
+        String frontRight = ((Corner) top.get(5)).getVc();
+
+        String leftBack1 = ((Corner) top.get(1)).getSc();
+        String leftFront1 = ((Corner) top.get(7)).getSc();
+
+        if (backLeft.equals(backRight) && rightTop.equals(rightBottom) && frontLeft.equals(frontRight) && leftBack1.equals(leftFront1)){
+            return; //if everything is equal, we got a headlights skip, stop the method
+        }
+        
         boolean ready = false;
         for (int i = 0; i < 3; i++) {
             String leftBack = ((Corner) top.get(1)).getSc();
@@ -1874,8 +1903,32 @@ public class Cube {
     }
 
     public void rotateTopEdges() {
+        String left1 = ((Corner) top.get(1)).getVc();
+        String middle1 = ((Edge) top.get(2)).getSc();
+        String right1 = ((Corner) top.get(3)).getVc();
+        boolean one = (left1.equals(middle1)) && (middle1.equals(right1));
+
+        String left2 = ((Corner) top.get(3)).getSc();
+        String middle2 = ((Edge) top.get(4)).getSc();
+        String right2 = ((Corner) top.get(5)).getSc();
+        boolean two = (left2.equals(middle2)) && (middle2.equals(right2));
+
+        String left3 = ((Corner) top.get(5)).getVc();
+        String middle3 = ((Edge) top.get(6)).getSc();
+        String right3 = ((Corner) top.get(7)).getVc();
+        boolean three = (left3.equals(middle3)) && (middle3.equals(right3));
+
+        String left4 = ((Corner) top.get(7)).getSc();
+        String middle4 = ((Edge) top.get(8)).getSc();
+        String right4 = ((Corner) top.get(1)).getSc();
+        boolean four = (left4.equals(middle4)) && (middle4.equals(right4));
+
+        if (one && two && three && four){
+            return; //if edges are correct, stop the method
+        }
+
         boolean ready = false;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             String left = ((Corner) top.get(1)).getVc();
             String middle = ((Edge) top.get(2)).getSc();
             String right = ((Corner) top.get(3)).getVc();
@@ -1955,12 +2008,12 @@ public class Cube {
         moves.add("top edges done");
     }
 
-    public void twistTop(){
+    public void twistTop() {
         String left = ((Corner) top.get(1)).getVc();
         String middle = ((Edge) top.get(2)).getSc();
         String right = ((Corner) top.get(3)).getVc();
 
-        while (!(left.equals("g") && middle.equals("g") && right.equals("g"))){
+        while (!(left.equals("g") && middle.equals("g") && right.equals("g"))) {
             U();
             left = ((Corner) top.get(1)).getVc();
             middle = ((Edge) top.get(2)).getSc();
