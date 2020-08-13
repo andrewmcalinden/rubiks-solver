@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.concurrent.TransferQueue;
 import java.util.ArrayList;
 
 public class Cube {
@@ -1337,7 +1338,7 @@ public class Cube {
 
     }
 
-    public void bringEdgesIntoTop() {
+    public void bringEdgesIntoMiddle() {
         // bring incorrectly rotated corners up to top layer
         for (int i = 1; i < middle.size(); i += 2) {
             Center center1 = (Center) middle.get(i - 1);
@@ -1387,17 +1388,14 @@ public class Cube {
                         break;
 
                     case 7:
-                        LPrime();
-                        UPrime();
-                        L();
-                        U();
                         F();
                         U();
                         FPrime();
-                        L();
                         UPrime();
                         LPrime();
-                        U();
+                        UPrime();
+                        L();
+                        
                         break;
                 }
             }
@@ -1568,7 +1566,7 @@ public class Cube {
             while (nonYellowInTop()) {
                 insertEdges();
             }
-            bringEdgesIntoTop();
+            bringEdgesIntoMiddle();
         }
         moves.add("second layer done ");
     }
@@ -1812,6 +1810,164 @@ public class Cube {
             }
         }
         moves.add(" top corners done");
+    }
+
+    public void headlights() {
+        boolean ready = false;
+        for (int i = 0; i < 3; i++) {
+            String leftBack = ((Corner) top.get(1)).getSc();
+            String leftFront = ((Corner) top.get(7)).getSc();
+
+            if (!(leftBack.equals(leftFront))) {
+                U();
+            } else { // we are ready for algo
+                ready = true;
+                break;
+            }
+        }
+
+        String leftBack = ((Corner) top.get(1)).getSc();
+        String leftFront = ((Corner) top.get(7)).getSc();
+
+        if (leftBack.equals(leftFront)) {
+            ready = true;
+        }
+
+        if (ready) {
+            R();
+            U();
+            RPrime();
+            UPrime();
+            RPrime();
+            F();
+            R();
+            R();
+            UPrime();
+            RPrime();
+            UPrime();
+            R();
+            U();
+            RPrime();
+            FPrime();
+        } else {
+            // same algo to create headlights
+            R();
+            U();
+            RPrime();
+            UPrime();
+            RPrime();
+            F();
+            R();
+            R();
+            UPrime();
+            RPrime();
+            UPrime();
+            R();
+            U();
+            RPrime();
+            FPrime();
+            // then do it again
+            headlights();
+            moves.remove(moves.size() - 1); // remove so we dont have "headlights done" twice
+        }
+        moves.add("headlights done ");
+    }
+
+    public void rotateTopEdges() {
+        boolean ready = false;
+        for (int i = 0; i < 4; i++) {
+            String left = ((Corner) top.get(1)).getVc();
+            String middle = ((Edge) top.get(2)).getSc();
+            String right = ((Corner) top.get(3)).getVc();
+
+            if (!((left.equals(middle)) && (middle.equals(right)))) {
+                U();
+            } else { // we are ready for algo
+                ready = true;
+                break;
+            }
+        }
+
+        String left = ((Corner) top.get(1)).getVc();
+        String middle = ((Edge) top.get(2)).getSc();
+        String right = ((Corner) top.get(3)).getVc();
+
+        if ((left.equals(middle)) && (middle.equals(right))) {
+            ready = true;
+        }
+
+        if (ready) {
+            boolean goRight = false; // assume algo is to the left
+
+            String c1 = ((Corner) top.get(1)).getSc();
+            String c2 = ((Edge) top.get(4)).getSc();
+
+            if (c1.equals(c2)) {
+                goRight = true;
+            }
+
+            if (goRight) {
+                R();
+                UPrime();
+                R();
+                U();
+                R();
+                U();
+                R();
+                UPrime();
+                RPrime();
+                UPrime();
+                R();
+                R();
+            } else {// need to go left
+                LPrime();
+                U();
+                LPrime();
+                UPrime();
+                LPrime();
+                UPrime();
+                LPrime();
+                U();
+                L();
+                U();
+                L();
+                L();
+            }
+        }
+        // no full side yet
+        else {
+            // do the algo
+            R();
+            UPrime();
+            R();
+            U();
+            R();
+            U();
+            R();
+            UPrime();
+            RPrime();
+            UPrime();
+            R();
+            R();
+            rotateTopEdges();
+            moves.remove(moves.size() - 1);
+        }
+        moves.add("top edges done");
+    }
+
+    public void twistTop(){
+        String left = ((Corner) top.get(1)).getVc();
+        String middle = ((Edge) top.get(2)).getSc();
+        String right = ((Corner) top.get(3)).getVc();
+
+        while (!(left.equals("g") && middle.equals("g") && right.equals("g"))){
+            U();
+            left = ((Corner) top.get(1)).getVc();
+            middle = ((Edge) top.get(2)).getSc();
+            right = ((Corner) top.get(3)).getVc();
+        }
+
+        moves.add("should be done");
     }
 
     public void update() {
