@@ -1338,7 +1338,7 @@ public class Cube {
 
     }
 
-    public void bringEdgesIntoMiddle() {
+    public void bringEdgesIntoTop() {
         // bring incorrectly rotated corners up to top layer
         for (int i = 1; i < middle.size(); i += 2) {
             Center center1 = (Center) middle.get(i - 1);
@@ -1566,7 +1566,7 @@ public class Cube {
             while (nonYellowInTop()) {
                 insertEdges();
             }
-            bringEdgesIntoMiddle();
+            bringEdgesIntoTop();
         }
         moves.add("second layer done ");
     }
@@ -1699,7 +1699,7 @@ public class Cube {
                 RPrime();
                 UPrime();
                 R();
-                U();
+                UPrime();
                 RPrime();
             }
         }

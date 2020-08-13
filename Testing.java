@@ -11,7 +11,7 @@ public class Testing {
         // ("B B U U F' L L B' D D L L R R F' D R R F L D' U' F F L B D D F F")
         // ("B R D F' R R B L L F R F' U L' F F L D D R' U L' F")
 
-        cube.scramble("B R D F' R R B L L F R F' U L' F F L D D R' U L' F");
+        cube.scramble("B D D F' R R B R L F D F' U L' F L' L F' D R' U L' F");
         System.out.println("Scrambled: " + cube + "\n");
 
         cube.cross();
