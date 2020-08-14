@@ -1,6 +1,5 @@
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class Cube {
@@ -1168,11 +1167,8 @@ public class Cube {
 
         // insert corners in top layer
         for (int i = 1; i < top.size(); i += 2) {
-            System.out.println(this);
-            
             Corner current = ((Corner) top.get(i));
             if (current.has("w")) {
-                System.out.println("corner " + current + " " + i);
 
                 String c1 = "";
                 String c2 = "";
@@ -2029,6 +2025,48 @@ public class Cube {
         cube.add(bottom);
         cube.add(middle);
         cube.add(top);
+    }
+
+    public List<String> trim(){
+        List<String> betterMoves = new ArrayList<>(moves);
+        for (int i = 0; i < betterMoves.size() - 4; i++){
+            //if we find 4 of the same move, remove all of them
+            if (betterMoves.get(i).equals(betterMoves.get(i + 1)) && betterMoves.get(i + 1).equals(betterMoves.get(i + 2)) && betterMoves.get(i + 2).equals(betterMoves
+                .get(i + 3))){
+                    betterMoves.remove(i);
+                    betterMoves.remove(i);
+                    betterMoves.remove(i);
+                    betterMoves.remove(i);
+            }
+        }
+
+        for (int i = 0; i < betterMoves.size() - 3; i++){
+            //if we find 3 of the same move, replace it with a prime
+            if(betterMoves.get(i).equals(betterMoves.get(i + 1)) && betterMoves.get(i + 1).equals(betterMoves.get(i + 2))){
+                String insert = "";
+                if (betterMoves.get(i).indexOf("'") >= 0){ //if it is already a prime
+                    insert = betterMoves.get(i).substring(0, 2); //make it not a prime, include space
+                }
+                else{
+                    insert = betterMoves.get(i).substring(0, 1) + "'";
+                }
+                betterMoves.add(i, insert);
+                betterMoves.remove(i + 1);
+                betterMoves.remove(i + 1);
+                betterMoves.remove(i + 1); 
+            }
+        }
+
+        for (int i = 0; i < betterMoves.size() - 2; i++) {
+            String orig1 = betterMoves.get(i);
+            String orig2 = betterMoves.get(i + 1);
+
+            if ((orig1 + "'").equals(orig2) || (orig2 + "'").equals(orig1)){
+                betterMoves.remove(i);
+                betterMoves.remove(i);
+            }
+        }
+        return betterMoves;
     }
 
     public String toString() {

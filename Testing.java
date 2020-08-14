@@ -11,7 +11,7 @@ public class Testing {
         // ("B B U U F' L L B' D D L L R R F' D R R F L D' U' F F L B D D F F")
         // ("B R D F' R R B L L F R F' U L' F F L D D R' U L' F")
 
-        cube.scramble("F L L B B D D B U U B R R B B D D F' L' U' R D' B U' B R F'");
+        cube.scramble("F L L B B B D D F' L' R L' F F R D' B U' B R F'");
         System.out.println("Scrambled: " + cube + "\n");
         
         cube.cross();
@@ -28,7 +28,6 @@ public class Testing {
 
         cube.topCorners();
         System.out.println("After top corners: " + cube + "\n");
-        System.out.println(cube.solvedState);
 
         cube.headlights();
         System.out.println("After headlights: " + cube + "\n");
@@ -40,6 +39,8 @@ public class Testing {
         System.out.println("Should be done: " + cube + "\n");
 
         System.out.println(cube.isSolved());
-        System.out.println(cube.moves.size());
+
+        System.out.println(cube.trim());
+        System.out.println(cube.trim().size());
     }
 }
