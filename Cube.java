@@ -1,3 +1,4 @@
+//Copyright 2020 Andrew McAlinden
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;

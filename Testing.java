@@ -1,4 +1,4 @@
-
+//Copyright 2020 Andrew McAlinden
 public class Testing {
 
     public static void main(String[] args) {

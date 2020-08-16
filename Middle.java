@@ -1,3 +1,4 @@
+//Copyright 2020 Andrew McAlinden
 import java.util.ArrayList;
 
 public class Middle extends Layer {

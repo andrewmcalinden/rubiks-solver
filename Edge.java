@@ -1,3 +1,4 @@
+//Copyright 2020 Andrew McAlinden
 public class Edge {
     private String fc;
     private String sc;
